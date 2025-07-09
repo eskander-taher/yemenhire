@@ -1,7 +1,9 @@
+import "../globals.css";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import NavBar from "@/components/NavBar";
 
 export default async function LocaleLayout({
 	children,
@@ -20,6 +22,7 @@ export default async function LocaleLayout({
 		<html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
 			<body>
 				<NextIntlClientProvider>
+					<NavBar />
 					<LanguageSwitcher />
 					{children}
 				</NextIntlClientProvider>
