@@ -1,22 +1,22 @@
 "use client"
 import { useState } from "react";
-import axios from "axios";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [message, setMessage] = useState("");
+	const { login } = useAuth();
+	const router = useRouter();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setMessage("");
 		try {
-			const res = await axios.post(
-				"http://localhost:4000/api/auth/login",
-				{ username, password },
-				{ withCredentials: true }
-			);
-			setMessage("Logged in as " + res.data.username);
+			await login(username, password);
+			setMessage("Logged in successfully!");
+			router.push("/me");
 		} catch (err) {
 			setMessage(err.response?.data?.message || "Error");
 		}

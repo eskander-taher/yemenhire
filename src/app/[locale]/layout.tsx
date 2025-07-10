@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import NavBar from "@/components/NavBar";
+import Providers from "@/components/Providers";
 
 export default async function LocaleLayout({
 	children,
@@ -22,9 +23,11 @@ export default async function LocaleLayout({
 		<html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
 			<body>
 				<NextIntlClientProvider>
-					<NavBar />
-					<LanguageSwitcher />
-					{children}
+					<Providers>
+						<NavBar />
+						<LanguageSwitcher />
+						{children}
+					</Providers>
 				</NextIntlClientProvider>
 			</body>
 		</html>

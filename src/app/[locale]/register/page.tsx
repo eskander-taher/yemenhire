@@ -1,23 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Register() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [message, setMessage] = useState("");
+	const { register } = useAuth();
+	const router = useRouter();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setMessage("");
 		try {
-			const res = await axios.post(
-				"http://localhost:4000/api/auth/register",
-				{ username, password },
-				{ withCredentials: true }
-			);
-			setMessage("Registered as " + res.data.username);
+			await register(username, password);
+			setMessage("Registered successfully!");
+			router.push("/me");
 		} catch (err) {
 			setMessage(err.response?.data?.message || "Error");
 		}
