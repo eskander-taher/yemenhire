@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import axios from "axios";
+import myAxios from "@/lib/myAxios";
 
 interface User {
 	username: string;
@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 	const checkAuth = async () => {
 		try {
-			const res = await axios.get("http://localhost:4000/api/auth/me", {
+			const res = await myAxios.get("/auth/me", {
 				withCredentials: true,
 			});
 			if (res.data.username) {
@@ -39,8 +39,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	};
 
 	const login = async (username: string, password: string) => {
-		const res = await axios.post(
-			"http://localhost:4000/api/auth/login",
+		const res = await myAxios.post(
+			"/auth/login",
 			{ username, password },
 			{ withCredentials: true }
 		);
@@ -48,8 +48,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 	};
 
 	const register = async (username: string, password: string) => {
-		const res = await axios.post(
-			"http://localhost:4000/api/auth/register",
+		const res = await myAxios.post(
+			"/auth/register",
 			{ username, password },
 			{ withCredentials: true }
 		);
@@ -58,8 +58,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 	const logout = async () => {
 		try {
-			await axios.post(
-				"http://localhost:4000/api/auth/logout",
+			await myAxios.post(
+				"/auth/logout",
 				{},
 				{ withCredentials: true }
 			);
