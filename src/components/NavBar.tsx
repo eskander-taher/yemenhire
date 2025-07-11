@@ -1,6 +1,5 @@
 "use client";
 import { Link, usePathname } from "@/i18n/navigation";
-import { useLocale } from "next-intl";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
@@ -20,12 +19,9 @@ const getNavItems = (isLoggedIn: boolean) => {
 
 export default function NavBar() {
 	const pathname = usePathname();
-	const locale = useLocale();
 	const { user, loading, logout } = useAuth();
 	const router = useRouter();
 
-	console.log(pathname);
-	console.log(locale);
 
 	if (loading) {
 		return (
