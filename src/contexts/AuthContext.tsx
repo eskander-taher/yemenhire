@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 			} else {
 				setUser(null);
 			}
-		} catch (err) {
+		} catch {
 			setUser(null);
 		} finally {
 			setLoading(false);
@@ -63,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				{},
 				{ withCredentials: true }
 			);
-		} catch (err) {
+		} catch {
 			// Ignore logout errors
 		}
 		setUser(null);

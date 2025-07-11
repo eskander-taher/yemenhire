@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import type { FormEvent } from "react";
+import type { AxiosError } from "axios";
 
 export default function Register() {
 	const [username, setUsername] = useState("");
@@ -11,15 +13,21 @@ export default function Register() {
 	const { register } = useAuth();
 	const router = useRouter();
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setMessage("");
 		try {
 			await register(username, password);
 			setMessage("Registered successfully!");
 			router.push("/me");
-		} catch (err) {
-			setMessage(err.response?.data?.message || "Error");
+		} catch (err: unknown) {
+			if (err && typeof err === "object" && "response" in err) {
+				setMessage(
+					(err as AxiosError<{ message?: string }>).response?.data?.message || "Error"
+				);
+			} else {
+				setMessage("Error");
+			}
 		}
 	};
 
