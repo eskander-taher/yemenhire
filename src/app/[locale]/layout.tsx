@@ -2,7 +2,6 @@ import "../globals.css";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import NavBar from "@/components/NavBar";
 import Providers from "@/components/Providers";
 

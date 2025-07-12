@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-const getBasicNavItems = (t: any) => {
+const getBasicNavItems = (t: (key: string) => string) => {
 	return [{ href: "/", label: t("home") }];
 };
 
-const getUnauthenticatedNavItems = (t: any) => {
+const getUnauthenticatedNavItems = (t: (key: string) => string) => {
 	return [
 		{ href: "/", label: t("home") },
 		{ href: "/login", label: t("login") },

@@ -9,16 +9,16 @@ export default function HomePage() {
 				<div className="max-w-4xl mx-auto">
 					<div className="mb-6">
 						<span className="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-							🇾🇪 Yemen's #1 Platform
+							🇾🇪 Yemen&apos;s #1 Platform
 						</span>
 					</div>
 					<h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
 						{t("title")}
 					</h1>
 					<p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed max-w-3xl mx-auto">
-						Yemen's largest platform connecting professionals with job opportunities and
-						businesses with government tenders. Find your next career move or secure
-						your next contract.
+						Yemen&apos;s largest platform connecting professionals with job
+						opportunities and businesses with government tenders. Find your next career
+						move or secure your next contract.
 					</p>
 					<div className="flex flex-col sm:flex-row gap-4 justify-center">
 						<button className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl text-lg">
@@ -34,7 +34,7 @@ export default function HomePage() {
 			{/* Stats Section */}
 			<section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl text-white">
 				<div className="text-center">
-					<h2 className="text-3xl font-bold mb-12">Yemen's Leading Platform</h2>
+					<h2 className="text-3xl font-bold mb-12">Yemen&apos;s Leading Platform</h2>
 					<div className="grid md:grid-cols-4 gap-8">
 						<div>
 							<div className="text-5xl font-bold mb-2">10,000+</div>
@@ -146,8 +146,8 @@ export default function HomePage() {
 							Advanced Search
 						</h3>
 						<p className="text-gray-600">
-							Find exactly what you're looking for with our powerful search and filter
-							system.
+							Find exactly what you&apos;re looking for with our powerful search and
+							filter system.
 						</p>
 					</div>
 

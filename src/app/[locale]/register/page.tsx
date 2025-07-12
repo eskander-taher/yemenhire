@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import type { FormEvent } from "react";
 import type { AxiosError } from "axios";
 
@@ -123,12 +124,12 @@ export default function Register() {
 					<div className="text-center mt-6">
 						<p className="text-gray-600">
 							Already have an account?{" "}
-							<a
+							<Link
 								href="/login"
 								className="text-green-600 hover:text-green-700 font-medium"
 							>
 								Sign in
-							</a>
+							</Link>
 						</p>
 					</div>
 				</div>

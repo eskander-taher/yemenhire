@@ -1,6 +1,7 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { Link } from "@/i18n/navigation";
 
 export default function Me() {
 	const { user, logout } = useAuth();
@@ -24,12 +25,12 @@ export default function Me() {
 					</div>
 					<h2 className="text-2xl font-bold text-gray-900 mb-4">Access Restricted</h2>
 					<p className="text-gray-600 mb-6">Please log in to view your profile.</p>
-					<a
+					<Link
 						href="/login"
 						className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
 					>
 						Go to Login
-					</a>
+					</Link>
 				</div>
 			</div>
 		);

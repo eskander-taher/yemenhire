@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import type { FormEvent } from "react";
 import type { AxiosError } from "axios";
 
@@ -123,13 +124,13 @@ export default function Login() {
 					{/* Footer */}
 					<div className="text-center mt-6">
 						<p className="text-gray-600">
-							Don't have an account?{" "}
-							<a
+							Don&apos;t have an account?{" "}
+							<Link
 								href="/register"
 								className="text-blue-600 hover:text-blue-700 font-medium"
 							>
 								Sign up
-							</a>
+							</Link>
 						</p>
 					</div>
 				</div>
