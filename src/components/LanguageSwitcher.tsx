@@ -29,21 +29,35 @@ export default function LanguageSwitcher() {
 	const getFlag = (locale: "ar" | "en") => {
 		switch (locale) {
 			case "en":
-				return "ar";
+				return "🇾🇪";
 			case "ar":
-				return "en";
+				return "🇺🇸";
 			default:
 				return "🏳️";
+		}
+	};
+
+	const getLocaleName = (locale: "ar" | "en") => {
+		switch (locale) {
+			case "en":
+				return "العربية";
+			case "ar":
+				return "English";
+			default:
+				return "Language";
 		}
 	};
 
 	return (
 		<button
 			onClick={() => switchToLocale(getNextLocale())}
-			className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-300 hover:border-gray-400 transition-colors"
-			title={`Switch to ${getNextLocale().toUpperCase()}`}
+			className="flex items-center space-x-2 px-3 py-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm"
+			title={`Switch to ${getLocaleName(getNextLocale() as "ar" | "en")}`}
 		>
 			<span className="text-lg">{getFlag(currentLocale as "ar" | "en")}</span>
+			<span className="text-sm font-medium text-gray-700 hidden sm:inline">
+				{getLocaleName(currentLocale as "ar" | "en")}
+			</span>
 		</button>
 	);
 }

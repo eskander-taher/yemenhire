@@ -5,5 +5,30 @@
 	},
 	"AboutPage": {
 		"title": "About page"
+	},
+	"Navigation": {
+		"home": "Home",
+		"login": "Login",
+		"register": "Register",
+		"me": "Me",
+		"logout": "Logout"
+	},
+	"AuthForms": {
+		"login": {
+			"title": "Login",
+			"username": "Username",
+			"password": "Password",
+			"submit": "Login",
+			"success": "Logged in successfully!",
+			"error": "Error"
+		},
+		"register": {
+			"title": "Register",
+			"username": "Username",
+			"password": "Password",
+			"submit": "Register",
+			"success": "Registered successfully!",
+			"error": "Error"
+		}
 	}
 }
