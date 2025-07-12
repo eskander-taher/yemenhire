@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { Link } from "@/i18n/navigation";
+import Link from "next/link";
 
 export default function Me() {
 	const { user, logout } = useAuth();

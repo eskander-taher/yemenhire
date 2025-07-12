@@ -14,9 +14,18 @@ const nextConfig: NextConfig = {
 	// Enable compression
 	compress: true,
 
-
 	// Optimize for production
 	poweredByHeader: false,
+
+	// Enable experimental features for better performance
+	experimental: {
+		// Enable SWC minification
+		swcMinify: true,
+		// Optimize package imports
+		optimizePackageImports: ["@tanstack/react-query"],
+		// Enable faster refresh
+		fastRefresh: true,
+	},
 
 	// Enable HTTP/2 Server Push
 	headers: async () => {
@@ -72,7 +81,22 @@ const nextConfig: NextConfig = {
 			};
 		}
 
+		// Optimize for faster builds
+		config.resolve.fallback = {
+			...config.resolve.fallback,
+			fs: false,
+		};
+
 		return config;
+	},
+
+	// Enable SWC for faster compilation
+	swcMinify: true,
+
+	// Optimize bundle size
+	compiler: {
+		// Remove console logs in production
+		removeConsole: process.env.NODE_ENV === "production",
 	},
 };
 
