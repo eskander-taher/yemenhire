@@ -3,18 +3,16 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
-const getNavItems = (isLoggedIn: boolean) => {
-	const items = [
+const getBasicNavItems = () => {
+	return [{ href: "/", label: "Home" }];
+};
+
+const getUnauthenticatedNavItems = () => {
+	return [
 		{ href: "/", label: "Home" },
 		{ href: "/login", label: "Login" },
 		{ href: "/register", label: "Register" },
 	];
-
-	if (isLoggedIn) {
-		items.push({ href: "/me", label: "Me" });
-	}
-
-	return items;
 };
 
 export default function NavBar() {
@@ -22,18 +20,8 @@ export default function NavBar() {
 	const { user, loading, logout } = useAuth();
 	const router = useRouter();
 
-
-	if (loading) {
-		return (
-			<nav className="bg-gray-100 border-b mb-8">
-				<div className="max-w-4xl mx-auto px-4 py-3 flex gap-4 items-center">
-					<div className="text-gray-500">Loading...</div>
-				</div>
-			</nav>
-		);
-	}
-
-	const navItems = getNavItems(!!user);
+	// Show different navigation items based on auth state
+	const navItems = !loading && user ? getBasicNavItems() : getUnauthenticatedNavItems();
 
 	const handleLogout = async () => {
 		try {
@@ -47,6 +35,7 @@ export default function NavBar() {
 	return (
 		<nav className="bg-gray-100 border-b mb-8">
 			<div className="max-w-4xl mx-auto px-4 py-3 flex gap-4 items-center">
+				{/* Show navigation items based on auth state */}
 				{navItems.map((item) => {
 					const isActive = item.href === pathname;
 					return (
@@ -61,13 +50,25 @@ export default function NavBar() {
 						</Link>
 					);
 				})}
-				{user && (
-					<button
-						onClick={handleLogout}
-						className="px-3 py-1 rounded hover:bg-red-200 transition-colors text-gray-800"
-					>
-						Logout
-					</button>
+
+				{/* Show auth-dependent items only after loading */}
+				{!loading && user && (
+					<>
+						<Link
+							href="/me"
+							className={`px-3 py-1 rounded hover:bg-blue-200 transition-colors ${
+								pathname === "/me" ? "bg-blue-600 text-white" : "text-gray-800"
+							}`}
+						>
+							Me
+						</Link>
+						<button
+							onClick={handleLogout}
+							className="px-3 py-1 rounded hover:bg-red-200 transition-colors text-gray-800"
+						>
+							Logout
+						</button>
+					</>
 				)}
 			</div>
 		</nav>
