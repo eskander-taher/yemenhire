@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -7,9 +7,20 @@ function makeQueryClient() {
 	return new QueryClient({
 		defaultOptions: {
 			queries: {
-				// With SSR, we usually want to set some default staleTime
-				// above 0 to avoid refetching immediately on the client
-				staleTime: 60 * 1000,
+				// Increase stale time to reduce unnecessary refetches
+				staleTime: 5 * 60 * 1000, // 5 minutes
+				// Cache data for longer
+				gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+				// Retry failed requests
+				retry: 1,
+				// Refetch on window focus
+				refetchOnWindowFocus: false,
+				// Refetch on reconnect
+				refetchOnReconnect: true,
+			},
+			mutations: {
+				// Retry failed mutations
+				retry: 1,
 			},
 		},
 	});
@@ -31,12 +42,42 @@ function getQueryClient() {
 	}
 }
 
+// Loading component for page transitions
+function LoadingSpinner() {
+	const [isLoading, setIsLoading] = useState(false);
+
+	useEffect(() => {
+		const handleStart = () => setIsLoading(true);
+		const handleComplete = () => setIsLoading(false);
+
+		// Listen for route changes
+		window.addEventListener("beforeunload", handleStart);
+		window.addEventListener("load", handleComplete);
+
+		return () => {
+			window.removeEventListener("beforeunload", handleStart);
+			window.removeEventListener("load", handleComplete);
+		};
+	}, []);
+
+	if (!isLoading) return null;
+
+	return (
+		<div className="fixed top-0 left-0 w-full h-1 bg-blue-600 z-50">
+			<div className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 animate-pulse"></div>
+		</div>
+	);
+}
+
 export default function Providers({ children }: { children: ReactNode }) {
 	const queryClient = getQueryClient();
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<AuthProvider>{children}</AuthProvider>;
+			<AuthProvider>
+				<LoadingSpinner />
+				{children}
+			</AuthProvider>
 		</QueryClientProvider>
 	);
 }

@@ -35,6 +35,11 @@ export default function NavBar() {
 		}
 	};
 
+	// Prefetch routes on hover for faster navigation
+	const handleMouseEnter = (href: string) => {
+		router.prefetch(href);
+	};
+
 	return (
 		<nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50">
 			<div className="max-w-4xl mx-auto px-4 py-4">
@@ -55,6 +60,7 @@ export default function NavBar() {
 								<Link
 									key={item.href}
 									href={item.href}
+									onMouseEnter={() => handleMouseEnter(item.href)}
 									className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
 										isActive
 											? "bg-blue-600 text-white shadow-md"
@@ -71,6 +77,7 @@ export default function NavBar() {
 							<>
 								<Link
 									href="/me"
+									onMouseEnter={() => handleMouseEnter("/me")}
 									className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
 										pathname === "/me"
 											? "bg-blue-600 text-white shadow-md"
