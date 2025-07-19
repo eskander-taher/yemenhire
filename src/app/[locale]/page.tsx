@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 export default function HomePage() {
 	const t = useTranslations("HomePage");
@@ -22,12 +23,18 @@ export default function HomePage() {
 						move or secure your next contract.
 					</p>
 					<div className="flex flex-col sm:flex-row gap-4 justify-center">
-						<button className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl text-lg">
+						<Link
+							href="/jobs"
+							className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl text-lg"
+						>
 							Find Jobs
-						</button>
-						<button className="px-8 py-4 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg">
+						</Link>
+						<Link
+							href="/tenders"
+							className="px-8 py-4 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg"
+						>
 							Browse Tenders
-						</button>
+						</Link>
 					</div>
 				</div>
 			</section>

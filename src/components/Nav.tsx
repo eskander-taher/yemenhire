@@ -5,7 +5,13 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import Image from "next/image";
 
 const getNavItems = (t: (key: string) => string) => {
-	return [{ href: "/", label: t("home") }];
+	return [
+		{ href: "/", label: t("home") },
+		{ href: "/jobs", label: t("jobs") },
+		{ href: "/tenders", label: t("tenders") },
+		{ href: "/advertise", label: t("advertise") },
+	];
+	
 };
 
 export default function NavBar() {

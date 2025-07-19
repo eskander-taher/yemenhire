@@ -11,7 +11,10 @@
 		"login": "Login",
 		"register": "Register",
 		"me": "Me",
-		"logout": "Logout"
+		"logout": "Logout",
+		"jobs": "jobs",
+		"tenders": "tenders",
+		"advertise": "advertise"
 	},
 	"AuthForms": {
 		"login": {
@@ -30,5 +33,24 @@
 			"success": "Registered successfully!",
 			"error": "Error"
 		}
+	},
+	"OpportunityForm": {
+		"title": "Ready to Post Your Opportunity?",
+		"subtitle": "Fill out the form below and our team will contact you shortly",
+		"contactName": "Contact Person Name",
+		"companyName": "Company Name",
+		"email": "Email",
+		"phone": "Phone Number",
+		"address": "Address",
+		"website": "Website (Optional)",
+		"postLabel": "What Would You Like to Post?",
+		"job": "Job",
+		"tender": "Tender",
+		"both": "Both",
+		"additionalInfo": "Additional Information (Optional)",
+		"submit": "Submit Request",
+		"submitting": "Submitting...",
+		"successMessage": "Your request has been submitted successfully! We will contact you soon.",
+		"errorMessage": "An error occurred while submitting your request. Please try again."
 	}
 }
