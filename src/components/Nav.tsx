@@ -3,6 +3,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Image from "next/image";
+import { useState } from "react";
 
 const getNavItems = (t: (key: string) => string) => {
 	return [
@@ -11,14 +12,13 @@ const getNavItems = (t: (key: string) => string) => {
 		{ href: "/tenders", label: t("tenders") },
 		{ href: "/advertise", label: t("advertise") },
 	];
-	
 };
 
 export default function NavBar() {
 	const pathname = usePathname();
 	const t = useTranslations("Navigation");
-
 	const navItems = getNavItems(t);
+	const [menuOpen, setMenuOpen] = useState(false);
 
 	return (
 		<nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50">
@@ -40,8 +40,29 @@ export default function NavBar() {
 						</div>
 					</Link>
 
-					{/* Navigation Links */}
-					<div className="flex items-center space-x-1">
+					{/* Hamburger for mobile */}
+					<button
+						className="md:hidden p-2 rounded-lg border border-gray-200 hover:bg-blue-50 ml-2"
+						onClick={() => setMenuOpen((v) => !v)}
+						aria-label="Open menu"
+					>
+						<svg
+							className="w-6 h-6 text-blue-700"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								d="M4 6h16M4 12h16M4 18h16"
+							/>
+						</svg>
+					</button>
+
+					{/* Navigation Links (desktop) */}
+					<div className="hidden md:flex items-center space-x-1">
 						{navItems.map((item) => {
 							const isActive = item.href === pathname;
 							return (
@@ -58,13 +79,37 @@ export default function NavBar() {
 								</Link>
 							);
 						})}
-
-						{/* Language Switcher */}
 						<div className="ml-4">
 							<LanguageSwitcher />
 						</div>
 					</div>
 				</div>
+
+				{/* Mobile menu dropdown */}
+				{menuOpen && (
+					<div className="md:hidden mt-4 bg-white rounded-xl shadow-lg border border-gray-100 p-4 absolute left-0 right-0 z-50">
+						{navItems.map((item) => {
+							const isActive = item.href === pathname;
+							return (
+								<Link
+									key={item.href}
+									href={item.href}
+									className={`block px-4 py-3 rounded-lg font-medium mb-1 transition-all duration-200 ${
+										isActive
+											? "bg-blue-600 text-white shadow-md"
+											: "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+									}`}
+									onClick={() => setMenuOpen(false)}
+								>
+									{item.label}
+								</Link>
+							);
+						})}
+						<div className="mt-2">
+							<LanguageSwitcher />
+						</div>
+					</div>
+				)}
 			</div>
 		</nav>
 	);
