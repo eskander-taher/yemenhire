@@ -50,7 +50,6 @@ export default function NavBar() {
 						<div className="flex items-center space-x-2">
 							<div className="w-10 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
 								<Image
-									className="dark:invert"
 									src="/yemenhire_logo_short.png"
 									alt="Yemen Hire logo"
 									width={180}
