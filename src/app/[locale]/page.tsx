@@ -1,9 +1,15 @@
+"use client";
+import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 
 export default function HomePage() {
 	const t = useTranslations("HomePage");
+	function toas() {
+		toast.success("asldfjas;ldkfhalskd");
+	}
 	return (
 		<div className="space-y-16">
+			<button onClick={toas}>Toast</button>
 			{/* Hero Section */}
 			<section className="text-center py-20">
 				<div className="max-w-4xl mx-auto">

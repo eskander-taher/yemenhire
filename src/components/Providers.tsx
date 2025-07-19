@@ -2,6 +2,8 @@
 import { ReactNode, useState, useEffect } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { isServer, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function makeQueryClient() {
 	return new QueryClient({
@@ -76,6 +78,16 @@ export default function Providers({ children }: { children: ReactNode }) {
 		<QueryClientProvider client={queryClient}>
 			<AuthProvider>
 				<LoadingSpinner />
+				<ToastContainer
+					position="top-right"
+					autoClose={3000}
+					hideProgressBar={false}
+					newestOnTop
+					closeOnClick
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+				/>
 				{children}
 			</AuthProvider>
 		</QueryClientProvider>
