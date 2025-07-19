@@ -4,6 +4,13 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import NavBar from "@/components/NavBar";
 import Providers from "@/components/Providers";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Yemen Hire | يمن هاير",
+	description:
+		"المنصة الأكبر للوظائف والمناقصات في اليمن | The biggest platform for jobs and tenders in Yemen",
+};
 
 export default async function LocaleLayout({
 	children,
@@ -42,3 +49,4 @@ export default async function LocaleLayout({
 		</html>
 	);
 }
+ 

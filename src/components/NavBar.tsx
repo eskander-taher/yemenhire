@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
+import Image from "next/image";
 
 const getBasicNavItems = (t: (key: string) => string) => {
 	return [{ href: "/", label: t("home") }];
@@ -45,12 +46,21 @@ export default function NavBar() {
 			<div className="max-w-4xl mx-auto px-4 py-4">
 				<div className="flex items-center justify-between">
 					{/* Logo/Brand */}
-					<div className="flex items-center space-x-2">
-						<div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-							<span className="text-white font-bold text-sm">Y</span>
+					<Link href="/">
+						<div className="flex items-center space-x-2">
+							<div className="w-10 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+								<Image
+									className="dark:invert"
+									src="/yemenhire_logo_short.png"
+									alt="Yemen Hire logo"
+									width={180}
+									height={38}
+									priority
+								/>
+							</div>
+							<span className="text-xl font-bold text-gray-800">YemenHire</span>
 						</div>
-						<span className="text-xl font-bold text-gray-800">YemenHire</span>
-					</div>
+					</Link>
 
 					{/* Navigation Links */}
 					<div className="flex items-center space-x-1">
