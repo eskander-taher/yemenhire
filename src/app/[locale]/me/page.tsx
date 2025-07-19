@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { Link } from "@/i18n/navigation";
+
 
 export default function Me() {
 	const { user, logout } = useAuth();
@@ -16,26 +16,6 @@ export default function Me() {
 		}
 	};
 
-	if (!user) {
-		return (
-			<div className="min-h-[80vh] flex items-center justify-center">
-				<div className="text-center">
-					<div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-						<span className="text-4xl">🔒</span>
-					</div>
-					<h2 className="text-2xl font-bold text-gray-900 mb-4">Access Restricted</h2>
-					<p className="text-gray-600 mb-6">Please log in to view your profile.</p>
-					<Link
-						href="/login"
-						className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-					>
-						Go to Login
-					</Link>
-				</div>
-			</div>
-		);
-	}
-
 	return (
 		<div className="space-y-8">
 			{/* Profile Header */}
@@ -43,12 +23,12 @@ export default function Me() {
 				<div className="flex items-center space-x-6">
 					<div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
 						<span className="text-2xl text-white font-bold">
-							{user.username.charAt(0).toUpperCase()}
+							{user?.username.charAt(0).toUpperCase()}
 						</span>
 					</div>
 					<div>
 						<h1 className="text-3xl font-bold text-gray-900">Welcome back!</h1>
-						<p className="text-gray-600">@{user.username}</p>
+						<p className="text-gray-600">@{user?.username}</p>
 					</div>
 				</div>
 			</div>
