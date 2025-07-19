@@ -1,45 +1,18 @@
 "use client";
 import { Link, usePathname } from "@/i18n/navigation";
-import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Image from "next/image";
 
-const getBasicNavItems = (t: (key: string) => string) => {
+const getNavItems = (t: (key: string) => string) => {
 	return [{ href: "/", label: t("home") }];
-};
-
-const getUnauthenticatedNavItems = (t: (key: string) => string) => {
-	return [
-		{ href: "/", label: t("home") },
-		{ href: "/login", label: t("login") },
-		{ href: "/register", label: t("register") },
-	];
 };
 
 export default function NavBar() {
 	const pathname = usePathname();
-	const { user, loading, logout } = useAuth();
-	const router = useRouter();
 	const t = useTranslations("Navigation");
 
-	// Show different navigation items based on auth state
-	const navItems = !loading && user ? getBasicNavItems(t) : getUnauthenticatedNavItems(t);
-
-	const handleLogout = async () => {
-		try {
-			await logout();
-			router.push("/");
-		} catch (err) {
-			console.error("Error logging out:", err);
-		}
-	};
-
-	// Prefetch routes on hover for faster navigation
-	const handleMouseEnter = (href: string) => {
-		router.prefetch(href);
-	};
+	const navItems = getNavItems(t);
 
 	return (
 		<nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50">
@@ -69,7 +42,6 @@ export default function NavBar() {
 								<Link
 									key={item.href}
 									href={item.href}
-									onMouseEnter={() => handleMouseEnter(item.href)}
 									className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
 										isActive
 											? "bg-blue-600 text-white shadow-md"
@@ -80,29 +52,6 @@ export default function NavBar() {
 								</Link>
 							);
 						})}
-
-						{/* Auth-dependent items */}
-						{!loading && user && (
-							<>
-								<Link
-									href="/me"
-									onMouseEnter={() => handleMouseEnter("/me")}
-									className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-										pathname === "/me"
-											? "bg-blue-600 text-white shadow-md"
-											: "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-									}`}
-								>
-									{t("me")}
-								</Link>
-								<button
-									onClick={handleLogout}
-									className="px-4 py-2 rounded-lg font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200"
-								>
-									{t("logout")}
-								</button>
-							</>
-						)}
 
 						{/* Language Switcher */}
 						<div className="ml-4">
