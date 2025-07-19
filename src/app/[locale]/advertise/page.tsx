@@ -19,7 +19,7 @@ export default function OpportunityForm() {
 	const input = `w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400`;
 
 	const mutation = useMutation({
-		mutationFn: async (formData) => {
+		mutationFn: async (formData: any) => {
 			const res = await myAxios.post("/api/post-opportunity", formData);
 			return res;
 		},
