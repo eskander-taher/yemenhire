@@ -77,15 +77,15 @@ export default function TendersPage() {
 					disabled={page === 1}
 					className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
 				>
-					Prev
+					{"<"}
 				</button>
-				<span className="font-semibold">Page {page}</span>
+				<span className="font-semibold">{page}</span>
 				<button
 					onClick={() => setPage((p) => (data.tenders.length === data.limit ? p + 1 : p))}
 					disabled={data.tenders.length < data.limit}
 					className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
 				>
-					Next
+					{">"}
 				</button>
 			</div>
 		</div>
