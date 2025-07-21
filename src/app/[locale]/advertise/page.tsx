@@ -20,7 +20,7 @@ export default function OpportunityForm() {
 
 	const mutation = useMutation({
 		mutationFn: async (formData: any) => {
-			const res = await myAxios.post("/api/post-opportunity", formData);
+			const res = await myAxios.post("/post-ad", formData);
 			return res;
 		},
 		onError: (error) => {
