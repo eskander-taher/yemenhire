@@ -17,39 +17,19 @@ interface JobsResponse {
 	limit: number;
 }
 
-const fetchJobs = async (page: number): Promise<JobsResponse> => {
-	const res = await myAxios.get(`/jobs?page=${page}`);
-	return res.data;
-};
-
-const deleteJob = async (id: string) => {
-	const res = await myAxios.delete(`/jobs/${id}`);
+const fetchJobs = async (): Promise<JobsResponse> => {
+	const res = await myAxios.get(`/jobs`);
 	return res.data;
 };
 
 export default function JobsPage() {
-	const [page, setPage] = useState(1);
-	const queryClient = useQueryClient();
 	const { data, isLoading, error } = useQuery<JobsResponse, Error>({
-		queryKey: ["jobs", page],
-		queryFn: () => fetchJobs(page),
-		gcTime: 0,
-		staleTime: 0,
-		refetchOnWindowFocus: false,
-		retry: 1,
-	});
-	const mutation = useMutation({
-		mutationFn: deleteJob,
-		onSuccess: () => {
-			toast.success("Job deleted");
-			queryClient.invalidateQueries({ queryKey: ["jobs"] });
-		},
-		onError: () => toast.error("Failed to delete job"),
+		queryKey: ["jobs"],
+		queryFn: () => fetchJobs(),
 	});
 
 	if (isLoading) return <div className="text-center py-8">Loading...</div>;
 	if (error) return <div className="text-center text-red-500 py-8">Error loading jobs</div>;
-	if (!data) return <div className="text-center py-8">No jobs found</div>;
 
 	return (
 		<div className="max-w-3xl mx-auto py-8">
@@ -57,7 +37,7 @@ export default function JobsPage() {
 				<h1 className="text-2xl font-bold">Jobs</h1>
 			</div>
 			<ul className="space-y-4">
-				{data.jobs.map((job) => (
+				{data?.jobs.map((job) => (
 					<li
 						key={job._id}
 						className="bg-white rounded-xl shadow p-4 flex items-center justify-between"
@@ -71,23 +51,6 @@ export default function JobsPage() {
 					</li>
 				))}
 			</ul>
-			<div className="flex justify-center items-center gap-4 mt-8">
-				<button
-					onClick={() => setPage((p) => Math.max(1, p - 1))}
-					disabled={page === 1}
-					className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
-				>
-					{"<"}
-				</button>
-				<span className="font-semibold"> {page}</span>
-				<button
-					onClick={() => setPage((p) => (data.jobs.length === data.limit ? p + 1 : p))}
-					disabled={data.jobs.length < data.limit}
-					className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50"
-				>
-					{">"}
-				</button>
-			</div>
 		</div>
 	);
 }

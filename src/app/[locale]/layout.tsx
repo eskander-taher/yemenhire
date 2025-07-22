@@ -1,11 +1,11 @@
 import "../globals.css";
+import { Metadata } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import NavBar from "@/components/Nav";
-import Footer from "@/components/Footer";
 import Providers from "@/components/Providers";
-import { Metadata } from "next";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
 	title: "Yemen Hire | يمن هاير",
