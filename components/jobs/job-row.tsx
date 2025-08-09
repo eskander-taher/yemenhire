@@ -97,9 +97,10 @@ export function JobRow({ job, locale, dict }: JobRowProps) {
         <Link href={`/${locale}/jobs/${job._id}`}>
           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
             <Eye className="h-4 w-4" />
+            View
           </Button>
         </Link>
-      </td>
+      </td> 
 
       {/* Apply Button */}
       <td className="px-6 py-4 whitespace-nowrap text-center">

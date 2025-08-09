@@ -74,7 +74,7 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
           </p>
 
           {/* Enhanced Search Bar */}
-          <form onSubmit={handleSearch} className="max-w-3xl mx-auto mb-12 animate-scale-in">
+          {/* <form onSubmit={handleSearch} className="max-w-3xl mx-auto mb-12 animate-scale-in">
             <div className="relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
               <div className="relative bg-white rounded-2xl shadow-2xl border border-gray-200/50 p-2">
@@ -96,7 +96,7 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
                 </div>
               </div>
             </div>
-          </form>
+          </form> */}
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">

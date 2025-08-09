@@ -26,7 +26,7 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
     location: (searchParams.location as string) || "",
     type: (searchParams.type as string) || "",
   })
-  // Add state for desktop view toggle
+  // Add state for desktop view toMapPinggle
   const [desktopView, setDesktopView] = useState<'table' | 'cards'>('table')
 
   const handleFilterChange = (newFilters: Partial<typeof filters>) => {
@@ -102,7 +102,7 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
             <span className="text-gray-600 ml-1">last 7 days</span>
           </div>
         </div>
-        <div className="relative w-full md:w-64">
+        {/* <div className="relative w-full md:w-64">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             placeholder={dict.jobs?.searchPlaceholder || "Search jobs..."}
@@ -113,7 +113,7 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
             }}
             className="pl-10 pr-4 py-2 border-gray-200"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Category filters */}
@@ -242,7 +242,7 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
       </div>
 
       {/* Pagination */}
-      {initialData.total > initialData.limit && (
+      {/* {initialData.total > initialData.limit && (
         <div className="mt-6">
           <Pagination
             currentPage={initialData.page}
@@ -251,7 +251,7 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
             className="justify-center"
           />
         </div>
-      )}
+      )} */}
     </div>
   )
 }

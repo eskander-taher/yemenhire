@@ -3,7 +3,6 @@
 import { TenderRow } from "./tender-row"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { AlertCircle, Search, Filter, Building2, MapPin, Calendar, Tag, Sparkles } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -54,7 +53,7 @@ export function TendersListing({ locale, dict, initialData, searchParams }: Tend
             </div>
           </div>
 
-          <div className="flex items-center space-x-4 rtl:space-x-reverse">
+          {/* <div className="flex items-center space-x-4 rtl:space-x-reverse">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
@@ -69,7 +68,7 @@ export function TendersListing({ locale, dict, initialData, searchParams }: Tend
               <Filter className="w-4 h-4 mr-2" />
               Search
             </Button>
-          </div>
+          </div> */}
         </div>
         {/* Category Filters removed */}
       </div>
@@ -195,7 +194,7 @@ export function TendersListing({ locale, dict, initialData, searchParams }: Tend
       </div>
 
       {/* Pagination */}
-      {initialData.total > initialData.limit && (
+      {/* {initialData.total > initialData.limit && (
         <div className="flex items-center justify-center mt-6">
           <Pagination
             currentPage={initialData.page}
@@ -209,7 +208,7 @@ export function TendersListing({ locale, dict, initialData, searchParams }: Tend
             className="justify-center"
           />
         </div>
-      )}
+      )} */}
     </div>
   )
 }
