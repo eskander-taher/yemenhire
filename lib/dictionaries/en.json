@@ -1,0 +1,142 @@
+{
+  "nav": {
+    "home": "Home",
+    "jobs": "Jobs",
+    "tenders": "Tenders",
+    "advertise": "Post Ad",
+    "language": "العربية"
+  },
+  "home": {
+    "hero": {
+      "title": "Find Your Next Opportunity in Yemen",
+      "subtitle": "Discover jobs and tenders from leading companies and organizations across Yemen",
+      "searchPlaceholder": "Search jobs, tenders, or companies...",
+      "searchButton": "Search",
+      "jobsButton": "Browse Jobs",
+      "tendersButton": "Browse Tenders"
+    },
+    "stats": {
+      "jobs": "Active Jobs",
+      "tenders": "Open Tenders",
+      "companies": "Companies",
+      "applications": "Applications"
+    },
+    "features": {
+      "title": "Why Choose YemenHire?",
+      "subtitle": "Your trusted platform for career opportunities and business growth",
+      "items": [
+        {
+          "title": "Verified Opportunities",
+          "description": "All jobs and tenders are verified for authenticity and quality"
+        },
+        {
+          "title": "Easy Application",
+          "description": "Simple and streamlined application process for all opportunities"
+        },
+        {
+          "title": "Real-time Updates",
+          "description": "Get notified about new opportunities that match your profile"
+        }
+      ]
+    }
+  },
+  "jobs": {
+    "title": "Job Opportunities",
+    "subtitle": "Find your perfect job match",
+    "searchPlaceholder": "Search jobs...",
+    "filters": {
+      "category": "Category",
+      "location": "Location",
+      "type": "Job Type",
+      "salary": "Salary Range"
+    },
+    "types": {
+      "full-time": "Full Time",
+      "part-time": "Part Time",
+      "contract": "Contract",
+      "freelance": "Freelance"
+    },
+    "details": {
+      "company": "Company",
+      "location": "Location",
+      "salary": "Salary",
+      "type": "Job Type",
+      "posted": "Posted",
+      "deadline": "Application Deadline",
+      "apply": "Apply Now",
+      "description": "Job Description",
+      "requirements": "Requirements"
+    }
+  },
+  "tenders": {
+    "title": "Tender Opportunities",
+    "subtitle": "Discover business opportunities",
+    "searchPlaceholder": "Search tenders...",
+    "filters": {
+      "category": "Category",
+      "location": "Location",
+      "budget": "Budget Range"
+    },
+    "details": {
+      "organization": "Organization",
+      "location": "Location",
+      "budget": "Budget",
+      "type": "Tender Type",
+      "posted": "Posted",
+      "deadline": "Submission Deadline",
+      "submit": "Submit Proposal",
+      "description": "Tender Description",
+      "requirements": "Requirements"
+    }
+  },
+  "advertise": {
+    "title": "Post Your Opportunity",
+    "subtitle": "Reach thousands of qualified candidates",
+    "jobTab": "Post Job",
+    "tenderTab": "Post Tender",
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "Enter job/tender title",
+      "description": "Description",
+      "descriptionPlaceholder": "Provide detailed description",
+      "company": "Company/Organization",
+      "companyPlaceholder": "Enter company name",
+      "location": "Location",
+      "locationPlaceholder": "Enter location",
+      "salary": "Salary",
+      "salaryPlaceholder": "Enter salary range",
+      "budget": "Budget",
+      "budgetPlaceholder": "Enter budget range",
+      "type": "Type",
+      "deadline": "Application/Submission Deadline",
+      "contact": "Contact Information",
+      "contactPlaceholder": "Email or phone number",
+      "submit": "Post Opportunity",
+      "submitting": "Posting..."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try Again",
+    "noResults": "No results found",
+    "loadMore": "Load More",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "success": "Success!",
+    "thankYou": "Thank You!",
+    "posted": "Posted",
+    "ago": "ago"
+  },
+  "footer": {
+    "description": "Your trusted platform for finding jobs and tenders in Yemen",
+    "quickLinks": "Quick Links",
+    "contact": "Contact Us",
+    "followUs": "Follow Us",
+    "rights": "All rights reserved"
+  }
+}

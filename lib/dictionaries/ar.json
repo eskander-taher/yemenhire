@@ -1,0 +1,142 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "jobs": "الوظائف",
+    "tenders": "المناقصات",
+    "advertise": "نشر إعلان",
+    "language": "English"
+  },
+  "home": {
+    "hero": {
+      "title": "اعثر على فرصتك القادمة في اليمن",
+      "subtitle": "اكتشف الوظائف والمناقصات من الشركات والمؤسسات الرائدة في جميع أنحاء اليمن",
+      "searchPlaceholder": "ابحث عن وظائف أو مناقصات أو شركات...",
+      "searchButton": "بحث",
+      "jobsButton": "تصفح الوظائف",
+      "tendersButton": "تصفح المناقصات"
+    },
+    "stats": {
+      "jobs": "وظيفة نشطة",
+      "tenders": "مناقصة مفتوحة",
+      "companies": "شركة",
+      "applications": "طلب توظيف"
+    },
+    "features": {
+      "title": "لماذا تختار يمن هاير؟",
+      "subtitle": "منصتك الموثوقة للفرص المهنية والنمو التجاري",
+      "items": [
+        {
+          "title": "فرص موثقة",
+          "description": "جميع الوظائف والمناقصات موثقة من حيث الأصالة والجودة"
+        },
+        {
+          "title": "تقديم سهل",
+          "description": "عملية تقديم بسيطة ومبسطة لجميع الفرص"
+        },
+        {
+          "title": "تحديثات فورية",
+          "description": "احصل على إشعارات حول الفرص الجديدة التي تناسب ملفك الشخصي"
+        }
+      ]
+    }
+  },
+  "jobs": {
+    "title": "الفرص الوظيفية",
+    "subtitle": "اعثر على الوظيفة المثالية لك",
+    "searchPlaceholder": "ابحث عن وظائف...",
+    "filters": {
+      "category": "الفئة",
+      "location": "الموقع",
+      "type": "نوع الوظيفة",
+      "salary": "نطاق الراتب"
+    },
+    "types": {
+      "full-time": "دوام كامل",
+      "part-time": "دوام جزئي",
+      "contract": "عقد",
+      "freelance": "عمل حر"
+    },
+    "details": {
+      "company": "الشركة",
+      "location": "الموقع",
+      "salary": "الراتب",
+      "type": "نوع الوظيفة",
+      "posted": "تاريخ النشر",
+      "deadline": "آخر موعد للتقديم",
+      "apply": "تقدم الآن",
+      "description": "وصف الوظيفة",
+      "requirements": "المتطلبات"
+    }
+  },
+  "tenders": {
+    "title": "فرص المناقصات",
+    "subtitle": "اكتشف الفرص التجارية",
+    "searchPlaceholder": "ابحث عن مناقصات...",
+    "filters": {
+      "category": "الفئة",
+      "location": "الموقع",
+      "budget": "نطاق الميزانية"
+    },
+    "details": {
+      "organization": "المؤسسة",
+      "location": "الموقع",
+      "budget": "الميزانية",
+      "type": "نوع المناقصة",
+      "posted": "تاريخ النشر",
+      "deadline": "آخر موعد للتقديم",
+      "submit": "تقديم عرض",
+      "description": "وصف المناقصة",
+      "requirements": "المتطلبات"
+    }
+  },
+  "advertise": {
+    "title": "انشر فرصتك",
+    "subtitle": "اوصل إلى آلاف المرشحين المؤهلين",
+    "jobTab": "نشر وظيفة",
+    "tenderTab": "نشر مناقصة",
+    "form": {
+      "title": "العنوان",
+      "titlePlaceholder": "أدخل عنوان الوظيفة/المناقصة",
+      "description": "الوصف",
+      "descriptionPlaceholder": "قدم وصفاً مفصلاً",
+      "company": "الشركة/المؤسسة",
+      "companyPlaceholder": "أدخل اسم الشركة",
+      "location": "الموقع",
+      "locationPlaceholder": "أدخل الموقع",
+      "salary": "الراتب",
+      "salaryPlaceholder": "أدخل نطاق الراتب",
+      "budget": "الميزانية",
+      "budgetPlaceholder": "أدخل نطاق الميزانية",
+      "type": "النوع",
+      "deadline": "آخر موعد للتقديم",
+      "contact": "معلومات الاتصال",
+      "contactPlaceholder": "البريد الإلكتروني أو رقم الهاتف",
+      "submit": "نشر الفرصة",
+      "submitting": "جاري النشر..."
+    }
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ ما",
+    "retry": "حاول مرة أخرى",
+    "noResults": "لا توجد نتائج",
+    "loadMore": "تحميل المزيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "close": "إغلاق",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "success": "نجح!",
+    "thankYou": "شكراً لك!",
+    "posted": "نُشر",
+    "ago": "منذ"
+  },
+  "footer": {
+    "description": "منصتك الموثوقة للعثور على الوظائف والمناقصات في اليمن",
+    "quickLinks": "روابط سريعة",
+    "contact": "اتصل بنا",
+    "followUs": "تابعنا",
+    "rights": "جميع الحقوق محفوظة"
+  }
+}
