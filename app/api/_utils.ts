@@ -1,4 +1,4 @@
-const BASE = "https://api.yemenhire.com/api"
+const BASE = "https://api.yemenhires.com/api"
 
 export async function proxyRequest(req: Request, path: string) {
   const url = new URL(req.url)

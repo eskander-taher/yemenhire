@@ -7,7 +7,7 @@
 //
 // Relative ("/api") works everywhere inside Next.js (dev, preview, prod).
 // ---------------------------------------------------------------------------
-export const BASE_URL = "https://api.yemenhire.com/api";
+export const BASE_URL = "https://api.yemenhires.com/api";
 
 export interface Job {
   _id: string;
