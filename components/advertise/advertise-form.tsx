@@ -54,13 +54,13 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
     mutationFn: (data: any) => jobsApi.createJob(data),
     onSuccess: (response) => {
       // Show success message with approval notice
-      alert('Job submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.')
+      alert(dict.advertise.form.jobSubmitSuccess)
       router.push(`/${locale}/thank-you?type=job`)
     },
     onError: (error: any) => {
       console.error('Job posting failed:', error)
       // TODO: Show user-friendly error message
-      alert('Job posting failed. Please contact support or try again later.')
+      alert(dict.advertise.form.jobSubmitError)
     },
   })
 
@@ -68,13 +68,13 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
     mutationFn: (data: any) => tendersApi.createTender(data),
     onSuccess: (response) => {
       // Show success message with approval notice
-      alert('Tender submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.')
+      alert(dict.advertise.form.tenderSubmitSuccess)
       router.push(`/${locale}/thank-you?type=tender`)
     },
     onError: (error: any) => {
       console.error('Tender posting failed:', error)
       // TODO: Show user-friendly error message
-      alert('Tender posting failed. Please contact support or try again later.')
+      alert(dict.advertise.form.tenderSubmitError)
     },
   })
 
@@ -97,16 +97,16 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
   }
 
   const categories = [
-    "Technology",
-    "Healthcare",
-    "Education",
-    "Finance",
-    "Marketing",
-    "Engineering",
-    "Construction",
-    "Consulting",
-    "Transportation",
-    "Other",
+    { key: "technology", label: dict.advertise.form.categories.technology },
+    { key: "healthcare", label: dict.advertise.form.categories.healthcare },
+    { key: "education", label: dict.advertise.form.categories.education },
+    { key: "finance", label: dict.advertise.form.categories.finance },
+    { key: "marketing", label: dict.advertise.form.categories.marketing },
+    { key: "engineering", label: dict.advertise.form.categories.engineering },
+    { key: "construction", label: dict.advertise.form.categories.construction },
+    { key: "consulting", label: dict.advertise.form.categories.consulting },
+    { key: "transportation", label: dict.advertise.form.categories.transportation },
+    { key: "other", label: dict.advertise.form.categories.other },
   ]
 
   return (
@@ -174,18 +174,18 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
                 </div>
 
                 <div>
-                  <Label htmlFor="job-category">Category</Label>
+                  <Label htmlFor="job-category">{dict.advertise.form.category}</Label>
                   <Select
                     value={jobForm.category}
                     onValueChange={(value) => setJobForm((prev) => ({ ...prev, category: value }))}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={dict.advertise.form.categoryPlaceholder} />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
+                        <SelectItem key={category.key} value={category.key}>
+                          {category.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -216,10 +216,10 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
               </div>
 
               <div>
-                <Label htmlFor="job-instructions">Application Instructions</Label>
+                <Label htmlFor="job-instructions">{dict.advertise.form.instructions}</Label>
                 <Textarea
                   id="job-instructions"
-                  placeholder="Provide specific instructions for applicants..."
+                  placeholder={dict.advertise.form.instructionsPlaceholder}
                   value={jobForm.instructions}
                   onChange={(e) => setJobForm((prev) => ({ ...prev, instructions: e.target.value }))}
                   rows={4}
@@ -231,11 +231,28 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
                 <Input
                   id="job-contact"
                   type="email"
-                  placeholder="contact@company.com"
+                  placeholder={dict.advertise.form.contactPlaceholder}
                   value={jobForm.contactEmail}
                   onChange={(e) => setJobForm((prev) => ({ ...prev, contactEmail: e.target.value }))}
                   required
                 />
+              </div>
+
+              <div>
+                <Label htmlFor="job-documents">{dict.advertise.form.documents}</Label>
+                <Input
+                  id="job-documents"
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || [])
+                    const fileNames = files.map(file => file.name)
+                    setJobForm((prev) => ({ ...prev, documents: fileNames }))
+                  }}
+                  className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/80"
+                />
+                <p className="text-sm text-gray-500 mt-1">{dict.advertise.form.documentsPlaceholder}</p>
               </div>
 
               <Button type="submit" className="w-full" disabled={jobMutation.isPending}>
@@ -291,18 +308,18 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
                 </div>
 
                 <div>
-                  <Label htmlFor="tender-category">Category</Label>
+                  <Label htmlFor="tender-category">{dict.advertise.form.category}</Label>
                   <Select
                     value={tenderForm.category}
                     onValueChange={(value) => setTenderForm((prev) => ({ ...prev, category: value }))}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={dict.advertise.form.categoryPlaceholder} />
                     </SelectTrigger>
                     <SelectContent>
                       {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
+                        <SelectItem key={category.key} value={category.key}>
+                          {category.label}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -333,10 +350,10 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
               </div>
 
               <div>
-                <Label htmlFor="tender-instructions">Submission Instructions</Label>
+                <Label htmlFor="tender-instructions">{dict.advertise.form.submissionInstructions}</Label>
                 <Textarea
                   id="tender-instructions"
-                  placeholder="Provide specific instructions for tender submissions..."
+                  placeholder={dict.advertise.form.submissionInstructionsPlaceholder}
                   value={tenderForm.instructions}
                   onChange={(e) => setTenderForm((prev) => ({ ...prev, instructions: e.target.value }))}
                   rows={4}
@@ -348,11 +365,28 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
                 <Input
                   id="tender-contact"
                   type="email"
-                  placeholder="procurement@organization.com"
+                  placeholder={dict.advertise.form.contactPlaceholder}
                   value={tenderForm.contactEmail}
                   onChange={(e) => setTenderForm((prev) => ({ ...prev, contactEmail: e.target.value }))}
                   required
                 />
+              </div>
+
+              <div>
+                <Label htmlFor="tender-documents">{dict.advertise.form.documents}</Label>
+                <Input
+                  id="tender-documents"
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || [])
+                    const fileNames = files.map(file => file.name)
+                    setTenderForm((prev) => ({ ...prev, documents: fileNames }))
+                  }}
+                  className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/80"
+                />
+                <p className="text-sm text-gray-500 mt-1">{dict.advertise.form.documentsPlaceholder}</p>
               </div>
 
               <Button type="submit" className="w-full" disabled={tenderMutation.isPending}>

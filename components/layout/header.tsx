@@ -56,7 +56,7 @@ export function Header({ locale, dict }: HeaderProps) {
             className="flex items-center space-x-2 rtl:space-x-reverse group"
           >
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 shadow-lg overflow-hidden">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 shadow-lg overflow-hidden">
                 <Image
                   src="/yemenhire_logo_short.png"
                   alt="YemenHire Logo"

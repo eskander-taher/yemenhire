@@ -109,10 +109,34 @@
       "budgetPlaceholder": "Enter budget range",
       "type": "Type",
       "deadline": "Application/Submission Deadline",
-      "contact": "Contact Information",
-      "contactPlaceholder": "Email or phone number",
+      "contact": "Email Address",
+      "contactPlaceholder": "Enter your email address",
+      "category": "Category",
+      "categoryPlaceholder": "Select category",
+      "instructions": "Application Instructions",
+      "instructionsPlaceholder": "Provide specific instructions for applicants...",
+      "submissionInstructions": "Submission Instructions", 
+      "submissionInstructionsPlaceholder": "Provide specific instructions for tender submissions...",
+      "documents": "Supporting Documents",
+      "documentsPlaceholder": "Upload relevant documents (PDF, DOC, DOCX)",
       "submit": "Post Opportunity",
-      "submitting": "Posting..."
+      "submitting": "Posting...",
+      "jobSubmitSuccess": "Job submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.",
+      "tenderSubmitSuccess": "Tender submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.",
+      "jobSubmitError": "Job posting failed. Please contact support or try again later.",
+      "tenderSubmitError": "Tender posting failed. Please contact support or try again later.",
+      "categories": {
+        "technology": "Technology",
+        "healthcare": "Healthcare", 
+        "education": "Education",
+        "finance": "Finance",
+        "marketing": "Marketing",
+        "engineering": "Engineering",
+        "construction": "Construction",
+        "consulting": "Consulting",
+        "transportation": "Transportation",
+        "other": "Other"
+      }
     }
   },
   "common": {
