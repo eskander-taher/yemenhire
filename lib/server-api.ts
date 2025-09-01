@@ -2,12 +2,15 @@
 // Build the base URL for our internal proxy Route Handlers.
 //
 // • If NEXT_PUBLIC_BASE_PATH is empty → just use the relative "/api".
-// • If it already starts with "http"  → it’s an absolute URL, use as-is.
+// • If it already starts with "http"  → it's an absolute URL, use as-is.
 // • Otherwise treat it as a path prefix and append "/api".
 //
 // Relative ("/api") works everywhere inside Next.js (dev, preview, prod).
 // ---------------------------------------------------------------------------
-export const BASE_URL = "https://api.yemenhires.com/api";
+export const BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://api.yemenhire.com/api"
+    : "http://localhost:5000/api";
 
 export interface Job {
   _id: string;
@@ -22,6 +25,12 @@ export interface Job {
   salary?: string;
   category?: string;
   contactEmail?: string;
+  status: "pending" | "approved" | "rejected";
+  submittedBy?: string;
+  submittedAt: string;
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -39,6 +48,12 @@ export interface Tender {
   budget?: string;
   category?: string;
   contactEmail?: string;
+  status: "pending" | "approved" | "rejected";
+  submittedBy?: string;
+  submittedAt: string;
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
   createdAt: string;
   updatedAt: string;
 }

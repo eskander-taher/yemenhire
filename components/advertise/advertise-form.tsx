@@ -52,15 +52,29 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
 
   const jobMutation = useMutation({
     mutationFn: (data: any) => jobsApi.createJob(data),
-    onSuccess: () => {
+    onSuccess: (response) => {
+      // Show success message with approval notice
+      alert('Job submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.')
       router.push(`/${locale}/thank-you?type=job`)
+    },
+    onError: (error: any) => {
+      console.error('Job posting failed:', error)
+      // TODO: Show user-friendly error message
+      alert('Job posting failed. Please contact support or try again later.')
     },
   })
 
   const tenderMutation = useMutation({
     mutationFn: (data: any) => tendersApi.createTender(data),
-    onSuccess: () => {
+    onSuccess: (response) => {
+      // Show success message with approval notice
+      alert('Tender submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.')
       router.push(`/${locale}/thank-you?type=tender`)
+    },
+    onError: (error: any) => {
+      console.error('Tender posting failed:', error)
+      // TODO: Show user-friendly error message
+      alert('Tender posting failed. Please contact support or try again later.')
     },
   })
 

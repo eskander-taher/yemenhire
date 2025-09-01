@@ -41,7 +41,7 @@ export default async function RootLayout({
   const isRTL = locale === "ar"
 
   return (
-    <html lang={locale} dir="ltr" className={`${inter.variable} ${cairo.variable}`} suppressHydrationWarning>
+    <html lang={locale} dir={isRTL ? "rtl" : "ltr"} className={`${inter.variable} ${cairo.variable}`} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>

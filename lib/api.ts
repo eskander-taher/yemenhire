@@ -53,6 +53,12 @@ export interface Job {
   salary?: string;
   category?: string;
   contactEmail?: string;
+  status: "pending" | "approved" | "rejected";
+  submittedBy?: string;
+  submittedAt: string;
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -70,6 +76,12 @@ export interface Tender {
   budget?: string;
   category?: string;
   contactEmail?: string;
+  status: "pending" | "approved" | "rejected";
+  submittedBy?: string;
+  submittedAt: string;
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
   createdAt: string;
   updatedAt: string;
 }

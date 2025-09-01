@@ -42,18 +42,9 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
 
       {/* Geometric shapes */}
       <div className="absolute top-20 left-10 w-20 h-20 bg-blue-200/30 rounded-full animate-float"></div>
-      <div
-        className="absolute top-40 right-20 w-16 h-16 bg-purple-200/30 rounded-lg rotate-45 animate-float"
-        style={{ animationDelay: "2s" }}
-      ></div>
-      <div
-        className="absolute bottom-40 left-20 w-12 h-12 bg-indigo-200/30 rounded-full animate-float"
-        style={{ animationDelay: "4s" }}
-      ></div>
-      <div
-        className="absolute bottom-20 right-10 w-24 h-24 bg-pink-200/30 rounded-lg rotate-12 animate-float"
-        style={{ animationDelay: "1s" }}
-      ></div>
+      <div className="absolute top-40 right-20 w-16 h-16 bg-purple-200/30 rounded-lg rotate-45 animate-float [animation-delay:2s]"></div>
+      <div className="absolute bottom-40 left-20 w-12 h-12 bg-indigo-200/30 rounded-full animate-float [animation-delay:4s]"></div>
+      <div className="absolute bottom-20 right-10 w-24 h-24 bg-pink-200/30 rounded-lg rotate-12 animate-float [animation-delay:1s]"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
         <div className="text-center animate-slide-up">
@@ -122,10 +113,7 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
           </div>
 
           {/* Trust indicators */}
-          <div
-            className="flex flex-wrap justify-center items-center gap-8 text-gray-500 animate-slide-up"
-            style={{ animationDelay: "0.3s" }}
-          >
+          <div className="flex flex-wrap justify-center items-center gap-8 text-gray-500 animate-slide-up [animation-delay:0.3s]">
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
               <Users className="w-5 h-5" />
               <span className="text-sm font-medium">Trusted by 10,000+ Users</span>

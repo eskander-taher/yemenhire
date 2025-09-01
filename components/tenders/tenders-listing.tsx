@@ -194,7 +194,7 @@ export function TendersListing({ locale, dict, initialData, searchParams }: Tend
       </div>
 
       {/* Pagination */}
-      {/* {initialData.total > initialData.limit && (
+      {initialData.total > initialData.limit && (
         <div className="flex items-center justify-center mt-6">
           <Pagination
             currentPage={initialData.page}
@@ -208,7 +208,7 @@ export function TendersListing({ locale, dict, initialData, searchParams }: Tend
             className="justify-center"
           />
         </div>
-      )} */}
+      )}
     </div>
   )
 }

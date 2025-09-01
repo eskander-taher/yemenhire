@@ -242,7 +242,7 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
       </div>
 
       {/* Pagination */}
-      {/* {initialData.total > initialData.limit && (
+      {initialData.total > initialData.limit && (
         <div className="mt-6">
           <Pagination
             currentPage={initialData.page}
@@ -251,7 +251,7 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
             className="justify-center"
           />
         </div>
-      )} */}
+      )}
     </div>
   )
 }
