@@ -109,10 +109,34 @@
       "budgetPlaceholder": "أدخل نطاق الميزانية",
       "type": "النوع",
       "deadline": "آخر موعد للتقديم",
-      "contact": "معلومات الاتصال",
-      "contactPlaceholder": "البريد الإلكتروني أو رقم الهاتف",
+      "contact": "البريد الإلكتروني",
+      "contactPlaceholder": "أدخل عنوان بريدك الإلكتروني",
+      "category": "الفئة",
+      "categoryPlaceholder": "اختر الفئة",
+      "instructions": "تعليمات التقديم",
+      "instructionsPlaceholder": "قدم تعليمات محددة للمتقدمين...",
+      "submissionInstructions": "تعليمات التقديم",
+      "submissionInstructionsPlaceholder": "قدم تعليمات محددة لتقديم المناقصات...",
+      "documents": "المستندات الداعمة",
+      "documentsPlaceholder": "ارفع المستندات ذات الصلة (PDF, DOC, DOCX)",
       "submit": "نشر الفرصة",
-      "submitting": "جاري النشر..."
+      "submitting": "جاري النشر...",
+      "jobSubmitSuccess": "تم تقديم الوظيفة بنجاح! طلبك الآن في انتظار موافقة المشرف. سيتم إشعارك بمجرد المراجعة.",
+      "tenderSubmitSuccess": "تم تقديم المناقصة بنجاح! طلبك الآن في انتظار موافقة المشرف. سيتم إشعارك بمجرد المراجعة.",
+      "jobSubmitError": "فشل في نشر الوظيفة. يرجى الاتصال بالدعم أو المحاولة مرة أخرى لاحقاً.",
+      "tenderSubmitError": "فشل في نشر المناقصة. يرجى الاتصال بالدعم أو المحاولة مرة أخرى لاحقاً.",
+      "categories": {
+        "technology": "التكنولوجيا",
+        "healthcare": "الرعاية الصحية",
+        "education": "التعليم",
+        "finance": "المالية",
+        "marketing": "التسويق",
+        "engineering": "الهندسة",
+        "construction": "البناء والتشييد",
+        "consulting": "الاستشارات",
+        "transportation": "النقل والمواصلات",
+        "other": "أخرى"
+      }
     }
   },
   "common": {
