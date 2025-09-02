@@ -24,7 +24,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
   const getFileDownloadUrl = (filename: string) => {
     const baseUrl = process.env.NODE_ENV === "development" 
       ? "http://localhost:5000" 
-      : "https://api.yemenhire.com"
+      : "https://api.yemenhires.com"
     return `${baseUrl}/uploads/${filename}`
   }
 

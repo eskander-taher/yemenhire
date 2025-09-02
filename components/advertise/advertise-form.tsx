@@ -27,7 +27,7 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
   // Direct axios configuration for Express server
   const API_BASE_URL = process.env.NODE_ENV === "development" 
     ? "http://localhost:5000/api" 
-    : "https://api.yemenhire.com/api"
+    : "https://api.yemenhires.com/api"
 
   const [jobForm, setJobForm] = useState({
     title: "",

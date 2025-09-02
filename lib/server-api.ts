@@ -3,7 +3,7 @@
 // ---------------------------------------------------------------------------
 export const BASE_URL =
   process.env.NODE_ENV === "production"
-    ? "https://api.yemenhire.com/api"
+    ? "https://api.yemenhires.com/api"
     : "http://localhost:5000/api";
 
 export interface Job {
