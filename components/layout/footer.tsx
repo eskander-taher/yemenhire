@@ -112,13 +112,19 @@ export function Footer({ locale, dict }: FooterProps) {
 								<div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center group-hover:bg-green-600 transition-colors">
 									<Phone className="w-4 h-4" />
 								</div>
-								<span>+967 1 234 567</span>
+								<span>00967771217267</span>
+							</div>
+							<div className="flex items-center space-x-3 rtl:space-x-reverse text-gray-300 group">
+								<div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center group-hover:bg-green-600 transition-colors">
+									<Phone className="w-4 h-4" />
+								</div>
+								<span>02328798</span>
 							</div>
 							<div className="flex items-center space-x-3 rtl:space-x-reverse text-gray-300 group">
 								<div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center group-hover:bg-purple-600 transition-colors">
 									<MapPin className="w-4 h-4" />
 								</div>
-								<span>Sana'a, Yemen</span>
+								<span>Aden, Yemen</span>
 							</div>
 						</div>
 					</div>
@@ -126,7 +132,7 @@ export function Footer({ locale, dict }: FooterProps) {
 
 				<div className="border-t border-gray-700 mt-12 pt-8 text-center">
 					<p className="text-gray-400 flex items-center justify-center space-x-2 rtl:space-x-reverse">
-						<span>&copy; 2024 YemenHire. {dict.footer.rights}</span>
+						<span>&copy; 2025 YemenHires. {dict.footer.rights}</span>
 						<Heart className="w-4 h-4 text-red-500 animate-pulse" />
 						<span>Made with love in Yemen</span>
 					</p>

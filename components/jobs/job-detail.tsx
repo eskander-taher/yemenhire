@@ -269,7 +269,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
           </Card>
 
           {/* Save & Share */}
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>Save & Share</CardTitle>
             </CardHeader>
@@ -283,7 +283,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
                 Share this Job
               </Button>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </div>

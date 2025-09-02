@@ -284,7 +284,7 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
           </Card>
 
           {/* Save & Share */}
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>Save & Share</CardTitle>
             </CardHeader>
@@ -298,7 +298,7 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
                 Share this Tender
               </Button>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </div>
