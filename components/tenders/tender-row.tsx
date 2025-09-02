@@ -41,41 +41,34 @@ export function TenderRow({ tender, locale, dict }: TenderRowProps) {
   return (
     <div className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-50 transition-colors">
       {/* Published Date */}
-      <div className="col-span-1 text-sm text-gray-600">
+      <div className="col-span-2 text-sm text-gray-600">
         {formatDate(displayDate, locale, { month: "short", day: "numeric" })}
       </div>
 
-      {/* Organization Logo */}
-      <div className="col-span-1">
-        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden">
-          <Image
-            src="/placeholder.svg?height=40&width=40"
-            alt={tender.organization || "Organization"}
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
+      {/* Organization */}
+      <div className="col-span-2">
+        <div className="flex items-center">
+          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden mr-2">
+            <Image
+              src="/placeholder.svg?height=32&width=32"
+              alt={tender.organization || "Organization"}
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+          </div>
+          <span className="text-sm text-gray-900 truncate">{tender.organization || "Organization"}</span>
         </div>
       </div>
 
       {/* Tender Title */}
-      <div className="col-span-4">
-        <div className="space-y-1">
-          <Link
-            href={`/${locale}/tenders/${tender._id}`}
-            className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
-          >
-            {tender.title}
-          </Link>
-          <div className="flex items-center space-x-2 rtl:space-x-reverse">
-            <span className="text-sm text-gray-600">{tender.organization || "Organization"}</span>
-            {tender.category && (
-              <Badge className={`${getTenderTypeColor(tender.category)} text-xs`}>
-                {dict.tenders?.types?.[tender.category] || tender.category}
-              </Badge>
-            )}
-          </div>
-        </div>
+      <div className="col-span-3">
+        <Link
+          href={`/${locale}/tenders/${tender._id}`}
+          className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
+        >
+          {tender.title}
+        </Link>
       </div>
 
       {/* Location */}
@@ -99,18 +92,14 @@ export function TenderRow({ tender, locale, dict }: TenderRowProps) {
         )}
       </div>
 
-      {/* Actions */}
-      <div className="col-span-2 flex items-center space-x-2 rtl:space-x-reverse">
+      {/* View Button */}
+      <div className="col-span-1 flex items-center justify-center">
         <Link href={`/${locale}/tenders/${tender._id}`}>
-          <Button variant="outline" size="sm">
+          <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium">
             <Eye className="w-4 h-4 mr-1" />
             View
           </Button>
         </Link>
-        <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-black">
-          <ExternalLink className="w-4 h-4 mr-1" />
-          Apply
-        </Button>
       </div>
     </div>
   )

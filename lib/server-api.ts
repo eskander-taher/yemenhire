@@ -1,11 +1,5 @@
 // ---------------------------------------------------------------------------
-// Build the base URL for our internal proxy Route Handlers.
-//
-// • If NEXT_PUBLIC_BASE_PATH is empty → just use the relative "/api".
-// • If it already starts with "http"  → it's an absolute URL, use as-is.
-// • Otherwise treat it as a path prefix and append "/api".
-//
-// Relative ("/api") works everywhere inside Next.js (dev, preview, prod).
+// Direct connection to Express server - no proxy layer
 // ---------------------------------------------------------------------------
 export const BASE_URL =
   process.env.NODE_ENV === "production"

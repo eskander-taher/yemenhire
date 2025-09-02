@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useMutation } from "@tanstack/react-query"
-import { jobsApi, tendersApi } from "@/lib/api"
+import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
-import { Briefcase, FileText } from "lucide-react"
+import { Briefcase, FileText, Upload, X } from "lucide-react"
 
 interface AdvertiseFormProps {
   locale: string
@@ -23,6 +23,11 @@ interface AdvertiseFormProps {
 export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState("job")
+
+  // Direct axios configuration for Express server
+  const API_BASE_URL = process.env.NODE_ENV === "development" 
+    ? "http://localhost:5000/api" 
+    : "https://api.yemenhire.com/api"
 
   const [jobForm, setJobForm] = useState({
     title: "",
@@ -34,7 +39,7 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
     deadline: "",
     contactEmail: "",
     instructions: "",
-    documents: [] as string[],
+    documents: [] as File[],
   })
 
   const [tenderForm, setTenderForm] = useState({
@@ -47,34 +52,68 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
     deadline: "",
     contactEmail: "",
     instructions: "",
-    documents: [] as string[],
+    documents: [] as File[],
   })
 
-  const jobMutation = useMutation({
-    mutationFn: (data: any) => jobsApi.createJob(data),
-    onSuccess: (response) => {
+  // Dynamic mutation that handles both jobs and tenders
+  const submitMutation = useMutation({
+    mutationFn: async ({ data, type }: { data: any; type: 'job' | 'tender' }) => {
+      const endpoint = type === 'job' ? 'jobs' : 'tenders'
+      
+      // Create FormData for multipart/form-data (required by multer middleware)
+      const formData = new FormData()
+      
+      // Add all fields to FormData
+      Object.keys(data).forEach(key => {
+        if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
+          if (key === 'documents' && Array.isArray(data[key])) {
+            // Handle file documents array
+            data[key].forEach((file: File) => {
+              formData.append('documents', file)
+            })
+          } else if (Array.isArray(data[key])) {
+            // Handle other arrays
+            data[key].forEach((item: any) => {
+              formData.append(key, item)
+            })
+          } else {
+            formData.append(key, data[key])
+          }
+        }
+      })
+      
+      const response = await axios.post(`${API_BASE_URL}/${endpoint}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 30000, // 30 seconds timeout (increased from 10s)
+      })
+      return { data: response.data, type }
+    },
+    onSuccess: ({ data, type }) => {
       // Show success message with approval notice
-      alert('Job submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.')
-      router.push(`/${locale}/thank-you?type=job`)
+      const message = type === 'job' 
+        ? 'Job submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.'
+        : 'Tender submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.'
+      
+      alert(message)
+      router.push(`/${locale}/thank-you?type=${type}`)
     },
     onError: (error: any) => {
-      console.error('Job posting failed:', error)
-      // TODO: Show user-friendly error message
-      alert('Job posting failed. Please contact support or try again later.')
-    },
-  })
-
-  const tenderMutation = useMutation({
-    mutationFn: (data: any) => tendersApi.createTender(data),
-    onSuccess: (response) => {
-      // Show success message with approval notice
-      alert('Tender submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.')
-      router.push(`/${locale}/thank-you?type=tender`)
-    },
-    onError: (error: any) => {
-      console.error('Tender posting failed:', error)
-      // TODO: Show user-friendly error message
-      alert('Tender posting failed. Please contact support or try again later.')
+      console.error('Submission failed:', error)
+      
+      // Extract meaningful error message
+      let errorMessage = 'Submission failed. Please contact support or try again later.'
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message
+      } else if (error.response?.data?.errors) {
+        errorMessage = `Validation failed: ${error.response.data.errors.join(', ')}`
+      } else if (error.message) {
+        errorMessage = `Error: ${error.message}`
+      }
+      
+      alert(errorMessage)
     },
   })
 
@@ -84,7 +123,7 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
       ...jobForm,
       deadline: jobForm.deadline ? new Date(jobForm.deadline).toISOString() : undefined,
     }
-    jobMutation.mutate(submitData)
+    submitMutation.mutate({ data: submitData, type: 'job' })
   }
 
   const handleTenderSubmit = (e: React.FormEvent) => {
@@ -93,7 +132,32 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
       ...tenderForm,
       deadline: tenderForm.deadline ? new Date(tenderForm.deadline).toISOString() : undefined,
     }
-    tenderMutation.mutate(submitData)
+    submitMutation.mutate({ data: submitData, type: 'tender' })
+  }
+
+  // File handling functions
+  const handleJobFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    setJobForm(prev => ({ ...prev, documents: files }))
+  }
+
+  const handleTenderFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    setTenderForm(prev => ({ ...prev, documents: files }))
+  }
+
+  const removeJobFile = (index: number) => {
+    setJobForm(prev => ({
+      ...prev,
+      documents: prev.documents.filter((_, i) => i !== index)
+    }))
+  }
+
+  const removeTenderFile = (index: number) => {
+    setTenderForm(prev => ({
+      ...prev,
+      documents: prev.documents.filter((_, i) => i !== index)
+    }))
   }
 
   const categories = [
@@ -238,8 +302,48 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={jobMutation.isPending}>
-                {jobMutation.isPending ? dict.advertise.form.submitting : dict.advertise.form.submit}
+              <div>
+                <Label htmlFor="job-documents">
+                  <Upload className="w-4 h-4 inline mr-2" />
+                  Documents (Optional)
+                </Label>
+                <Input
+                  id="job-documents"
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                  onChange={handleJobFileChange}
+                  className="cursor-pointer"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Upload up to 5 files (PDF, DOC, DOCX, TXT, JPG, PNG). Max 5MB each.
+                </p>
+                
+                {/* Display selected files */}
+                {jobForm.documents.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {jobForm.documents.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                        <span className="text-sm text-gray-700 truncate">
+                          {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeJobFile(index)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Button type="submit" className="w-full" disabled={submitMutation.isPending}>
+                {submitMutation.isPending ? dict.advertise.form.submitting : dict.advertise.form.submit}
               </Button>
             </form>
           </TabsContent>
@@ -355,8 +459,48 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
                 />
               </div>
 
-              <Button type="submit" className="w-full" disabled={tenderMutation.isPending}>
-                {tenderMutation.isPending ? dict.advertise.form.submitting : dict.advertise.form.submit}
+              <div>
+                <Label htmlFor="tender-documents">
+                  <Upload className="w-4 h-4 inline mr-2" />
+                  Documents (Optional)
+                </Label>
+                <Input
+                  id="tender-documents"
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+                  onChange={handleTenderFileChange}
+                  className="cursor-pointer"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Upload up to 5 files (PDF, DOC, DOCX, TXT, JPG, PNG). Max 5MB each.
+                </p>
+                
+                {/* Display selected files */}
+                {tenderForm.documents.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    {tenderForm.documents.map((file, index) => (
+                      <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                        <span className="text-sm text-gray-700 truncate">
+                          {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                        </span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeTenderFile(index)}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <X className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <Button type="submit" className="w-full" disabled={submitMutation.isPending}>
+                {submitMutation.isPending ? dict.advertise.form.submitting : dict.advertise.form.submit}
               </Button>
             </form>
           </TabsContent>

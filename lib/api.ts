@@ -1,8 +1,11 @@
 import axios from "axios";
 
-const baseURL = "/api"; // all client code now hits our proxy
+// Direct connection to Express server - no proxy
+const baseURL = process.env.NODE_ENV === "development" 
+  ? "http://localhost:5000/api" 
+  : "https://api.yemenhire.com/api";
 
-// Create axios instance with base configuration
+// Create axios instance with base configuration for direct Express server calls
 export const apiClient = axios.create({
   baseURL,
   headers: {

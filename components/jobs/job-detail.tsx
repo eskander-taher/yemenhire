@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, Calendar, DollarSign, Building2, Bookmark, Share2, ExternalLink, FileText, Mail } from "lucide-react"
+import { MapPin, Calendar, DollarSign, Building2, Bookmark, Share2, ExternalLink, FileText, Mail, Download } from "lucide-react"
 import type { Job } from "@/lib/server-api"
 
 interface JobDetailProps {
@@ -19,6 +19,24 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
       month: "long",
       day: "numeric",
     })
+  }
+
+  const getFileDownloadUrl = (filename: string) => {
+    const baseUrl = process.env.NODE_ENV === "development" 
+      ? "http://localhost:5000" 
+      : "https://api.yemenhire.com"
+    return `${baseUrl}/uploads/${filename}`
+  }
+
+  const handleDownload = (filename: string, index: number) => {
+    const url = getFileDownloadUrl(filename)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `document-${index + 1}`
+    link.target = '_blank'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
   const getDaysRemaining = (deadline?: string) => {
@@ -101,17 +119,28 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
           {job.documents && job.documents.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Required Documents</CardTitle>
+                <CardTitle>Documents</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3">
                   {job.documents.map((doc, index) => (
                     <div
                       key={index}
-                      className="flex items-center space-x-3 rtl:space-x-reverse p-3 bg-gray-50 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                      <FileText className="w-5 h-5 text-blue-600" />
-                      <span className="text-gray-700">{doc}</span>
+                      <div className="flex items-center space-x-3">
+                        <FileText className="w-5 h-5 text-blue-600" />
+                        <span className="text-gray-700 font-medium">Document {index + 1}</span>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDownload(doc, index)}
+                        className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+                      >
+                        <Download className="w-4 h-4 mr-1" />
+                        Download
+                      </Button>
                     </div>
                   ))}
                 </div>

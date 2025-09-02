@@ -94,12 +94,12 @@ export function TendersListing({ locale, dict, initialData, searchParams }: Tend
         <div className="hidden sm:block bg-white rounded-lg shadow-sm border overflow-x-auto">
           {/* Table Header */}
           <div className="grid grid-cols-12 gap-4 p-4 bg-gray-50 border-b text-sm font-medium text-gray-700">
-            <div className="col-span-1">Published</div>
-            <div className="col-span-1">Organization</div>
-            <div className="col-span-4">Title</div>
+            <div className="col-span-2">Posted</div>
+            <div className="col-span-2">Organization</div>
+            <div className="col-span-3">Title</div>
             <div className="col-span-2">Location</div>
             <div className="col-span-2">Deadline</div>
-            <div className="col-span-2">Actions</div>
+            <div className="col-span-1">View</div>
           </div>
           {/* Tenders List */}
           <div className="divide-y divide-gray-100">

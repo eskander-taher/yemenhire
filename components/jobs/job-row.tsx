@@ -56,15 +56,7 @@ export function JobRow({ job, locale, dict }: JobRowProps) {
 
       {/* Title */}
       <td className="px-6 py-4">
-        <div className="text-sm font-medium text-gray-900 mb-1">{job.title}</div>
-        <div className="flex items-center space-x-2">
-          {job.category && (
-            <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-800">
-              {job.category}
-            </Badge>
-          )}
-          {job.salary && <span className="text-xs text-gray-600">{job.salary}</span>}
-        </div>
+        <div className="text-sm font-medium text-gray-900">{job.title}</div>
       </td>
 
       {/* Location */}
@@ -95,19 +87,9 @@ export function JobRow({ job, locale, dict }: JobRowProps) {
       {/* View Button */}
       <td className="px-6 py-4 whitespace-nowrap text-center">
         <Link href={`/${locale}/jobs/${job._id}`}>
-          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-            <Eye className="h-4 w-4" />
-            View
-          </Button>
-        </Link>
-      </td> 
-
-      {/* Apply Button */}
-      <td className="px-6 py-4 whitespace-nowrap text-center">
-        <Link href={`/${locale}/jobs/${job._id}`}>
           <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium">
-            <ExternalLink className="h-4 w-4 mr-1" />
-            Apply
+            <Eye className="h-4 w-4 mr-1" />
+            View
           </Button>
         </Link>
       </td>
