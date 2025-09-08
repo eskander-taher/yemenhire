@@ -3,8 +3,11 @@
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, Calendar, DollarSign, Building2, Bookmark, Share2, ExternalLink, FileText, Mail, Download } from "lucide-react"
+import { MapPin, Calendar, DollarSign, Building2, Bookmark, Share2, ExternalLink, FileText, Mail, Download, Briefcase } from "lucide-react"
 import type { Job } from "@/lib/server-api"
+import { useRelatedJobs } from "@/hooks/useJobs"
+import { RelatedJobCard } from "./related-job-card"
+import Link from "next/link"
 
 interface JobDetailProps {
   job: Job
@@ -13,6 +16,8 @@ interface JobDetailProps {
 }
 
 export function JobDetail({ job, locale, dict }: JobDetailProps) {
+  const { data: relatedJobsData, isLoading: relatedJobsLoading } = useRelatedJobs(job)
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(locale === "ar" ? "ar-YE" : "en-US", {
       year: "numeric",
@@ -22,8 +27,8 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
   }
 
   const getFileDownloadUrl = (filename: string) => {
-    const baseUrl = process.env.NODE_ENV === "development" 
-      ? "http://localhost:5000" 
+    const baseUrl = process.env.NODE_ENV === "development"
+      ? "http://localhost:5000"
       : "https://api.yemenhires.com"
     return `${baseUrl}/uploads/${filename}`
   }
@@ -99,7 +104,10 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
               <CardTitle>Job Description</CardTitle>
             </CardHeader>
             <CardContent className="prose max-w-none">
-              <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">{job.description}</div>
+              <div
+                className={`text-gray-700 leading-relaxed ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}
+                dangerouslySetInnerHTML={{ __html: job.description || '' }}
+              />
             </CardContent>
           </Card>
 
@@ -110,7 +118,10 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
                 <CardTitle>Application Instructions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">{job.instructions}</div>
+                <div
+                  className={`text-gray-700 leading-relaxed ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}
+                  dangerouslySetInnerHTML={{ __html: job.instructions || '' }}
+                />
               </CardContent>
             </Card>
           )}
@@ -164,6 +175,29 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
               </CardContent>
             </Card>
           )}
+
+          {/* Key Guidelines */}
+          <Card className="border-blue-200 bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-blue-800 flex items-center">
+                {dict.jobs.guidelines.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {dict.jobs.guidelines.items.map((guideline: string, index: number) => (
+                  <div key={index} className="flex items-start space-x-3 rtl:space-x-reverse">
+                    <div className="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium mt-0.5">
+                      {index + 1}
+                    </div>
+                    <p className={`text-blue-900 leading-relaxed ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}>
+                      {guideline}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Sidebar */}
@@ -179,25 +213,51 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
             </CardHeader>
           </Card>
 
-          {/* Job Application */}
+          {/* Related Jobs */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-center">Job Application</CardTitle>
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Briefcase className="w-5 h-5 mr-2 text-blue-600" />
+                  {dict.jobs.relatedJobs.title}
+                </div>
+                <Link href={`/${locale}/jobs`} className="text-sm text-blue-600 hover:text-blue-800">
+                  {dict.jobs.relatedJobs.viewAll}
+                </Link>
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-gray-600 text-center">Click the button below to apply for this position</p>
-              {job.contactEmail ? (
-                <a href={`mailto:${job.contactEmail}?subject=Application for ${job.title}`}>
-                  <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium">
-                    <Mail className="w-4 h-4 mr-2" />
-                    Apply via Email
-                  </Button>
-                </a>
+            <CardContent>
+              {relatedJobsLoading ? (
+                <div className="space-y-3">
+                  {[...Array(3)].map((_, index) => (
+                    <div key={index} className="p-4 border border-gray-200 rounded-lg animate-pulse">
+                      <div className="space-y-2">
+                        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                        <div className="flex justify-between">
+                          <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+                          <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : relatedJobsData?.jobs && relatedJobsData.jobs.length > 0 ? (
+                <div className="space-y-3">
+                  {relatedJobsData.jobs.map((relatedJob) => (
+                    <RelatedJobCard
+                      key={relatedJob._id}
+                      job={relatedJob}
+                      locale={locale}
+                      dict={dict}
+                    />
+                  ))}
+                </div>
               ) : (
-                <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium">
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Apply Now
-                </Button>
+                <div className="text-center py-8 text-gray-500">
+                  <Briefcase className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                  <p className="text-sm">{dict.jobs.relatedJobs.noRelated}</p>
+                </div>
               )}
             </CardContent>
           </Card>

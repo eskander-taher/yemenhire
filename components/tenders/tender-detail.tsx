@@ -38,8 +38,8 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
   const daysRemaining = getDaysRemaining(tender.deadline)
 
   const getFileDownloadUrl = (filename: string) => {
-    const baseUrl = process.env.NODE_ENV === "development" 
-      ? "http://localhost:5000" 
+    const baseUrl = process.env.NODE_ENV === "development"
+      ? "http://localhost:5000"
       : "https://api.yemenhires.com"
     return `${baseUrl}/uploads/${filename}`
   }
@@ -114,7 +114,10 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
               <CardTitle>Tender Description</CardTitle>
             </CardHeader>
             <CardContent className="prose max-w-none">
-              <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">{tender.description}</div>
+              <div
+                className={`text-gray-700 leading-relaxed ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}
+                dangerouslySetInnerHTML={{ __html: tender.description || '' }}
+              />
             </CardContent>
           </Card>
 
@@ -125,7 +128,10 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
                 <CardTitle>Submission Instructions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">{tender.instructions}</div>
+                <div
+                  className={`text-gray-700 leading-relaxed ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}
+                  dangerouslySetInnerHTML={{ __html: tender.instructions || '' }}
+                />
               </CardContent>
             </Card>
           )}

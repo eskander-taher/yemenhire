@@ -8,6 +8,7 @@ import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { RichTextEditor } from "@/components/ui/rich-text-editor"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -25,8 +26,8 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
   const [activeTab, setActiveTab] = useState("job")
 
   // Direct axios configuration for Express server
-  const API_BASE_URL = process.env.NODE_ENV === "development" 
-    ? "http://localhost:5000/api" 
+  const API_BASE_URL = process.env.NODE_ENV === "development"
+    ? "http://localhost:5000/api"
     : "https://api.yemenhires.com/api"
 
   const [jobForm, setJobForm] = useState({
@@ -59,10 +60,10 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
   const submitMutation = useMutation({
     mutationFn: async ({ data, type }: { data: any; type: 'job' | 'tender' }) => {
       const endpoint = type === 'job' ? 'jobs' : 'tenders'
-      
+
       // Create FormData for multipart/form-data (required by multer middleware)
       const formData = new FormData()
-      
+
       // Add all fields to FormData
       Object.keys(data).forEach(key => {
         if (data[key] !== undefined && data[key] !== null && data[key] !== '') {
@@ -81,7 +82,7 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
           }
         }
       })
-      
+
       const response = await axios.post(`${API_BASE_URL}/${endpoint}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -92,19 +93,19 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
     },
     onSuccess: ({ data, type }) => {
       // Show success message with approval notice
-      const message = type === 'job' 
+      const message = type === 'job'
         ? 'Job submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.'
         : 'Tender submitted successfully! Your submission is now pending admin approval. You will be notified once it is reviewed.'
-      
+
       alert(message)
       router.push(`/${locale}/thank-you?type=${type}`)
     },
     onError: (error: any) => {
       console.error('Submission failed:', error)
-      
+
       // Extract meaningful error message
       let errorMessage = 'Submission failed. Please contact support or try again later.'
-      
+
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message
       } else if (error.response?.data?.errors) {
@@ -112,7 +113,7 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
       } else if (error.message) {
         errorMessage = `Error: ${error.message}`
       }
-      
+
       alert(errorMessage)
     },
   })
@@ -269,24 +270,23 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
 
               <div>
                 <Label htmlFor="job-description">{dict.advertise.form.description}</Label>
-                <Textarea
-                  id="job-description"
+                <RichTextEditor
+                  content={jobForm.description}
+                  onChange={(content) => setJobForm((prev) => ({ ...prev, description: content }))}
                   placeholder={dict.advertise.form.descriptionPlaceholder}
-                  value={jobForm.description}
-                  onChange={(e) => setJobForm((prev) => ({ ...prev, description: e.target.value }))}
-                  rows={6}
-                  required
+                  className="min-h-[150px]"
+                  locale={locale}
                 />
               </div>
 
               <div>
                 <Label htmlFor="job-instructions">{dict.advertise.form.instructions}</Label>
-                <Textarea
-                  id="job-instructions"
+                <RichTextEditor
+                  content={jobForm.instructions}
+                  onChange={(content) => setJobForm((prev) => ({ ...prev, instructions: content }))}
                   placeholder={dict.advertise.form.instructionsPlaceholder}
-                  value={jobForm.instructions}
-                  onChange={(e) => setJobForm((prev) => ({ ...prev, instructions: e.target.value }))}
-                  rows={4}
+                  className="min-h-[120px]"
+                  locale={locale}
                 />
               </div>
 
@@ -318,7 +318,7 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
                 <p className="text-sm text-gray-500 mt-1">
                   Upload up to 5 files (PDF, DOC, DOCX, TXT, JPG, PNG). Max 5MB each.
                 </p>
-                
+
                 {/* Display selected files */}
                 {jobForm.documents.length > 0 && (
                   <div className="mt-3 space-y-2">
@@ -426,24 +426,23 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
 
               <div>
                 <Label htmlFor="tender-description">{dict.advertise.form.description}</Label>
-                <Textarea
-                  id="tender-description"
+                <RichTextEditor
+                  content={tenderForm.description}
+                  onChange={(content) => setTenderForm((prev) => ({ ...prev, description: content }))}
                   placeholder={dict.advertise.form.descriptionPlaceholder}
-                  value={tenderForm.description}
-                  onChange={(e) => setTenderForm((prev) => ({ ...prev, description: e.target.value }))}
-                  rows={6}
-                  required
+                  className="min-h-[150px]"
+                  locale={locale}
                 />
               </div>
 
               <div>
                 <Label htmlFor="tender-instructions">{dict.advertise.form.submissionInstructions}</Label>
-                <Textarea
-                  id="tender-instructions"
+                <RichTextEditor
+                  content={tenderForm.instructions}
+                  onChange={(content) => setTenderForm((prev) => ({ ...prev, instructions: content }))}
                   placeholder={dict.advertise.form.submissionInstructionsPlaceholder}
-                  value={tenderForm.instructions}
-                  onChange={(e) => setTenderForm((prev) => ({ ...prev, instructions: e.target.value }))}
-                  rows={4}
+                  className="min-h-[120px]"
+                  locale={locale}
                 />
               </div>
 
@@ -475,7 +474,7 @@ export function AdvertiseForm({ locale, dict }: AdvertiseFormProps) {
                 <p className="text-sm text-gray-500 mt-1">
                   Upload up to 5 files (PDF, DOC, DOCX, TXT, JPG, PNG). Max 5MB each.
                 </p>
-                
+
                 {/* Display selected files */}
                 {tenderForm.documents.length > 0 && (
                   <div className="mt-3 space-y-2">

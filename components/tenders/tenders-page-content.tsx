@@ -19,6 +19,8 @@ export default function TendersPageContent({ params }: TendersPageContentProps) 
   const search = searchParams.get("search") || ""
   const category = searchParams.get("category") || ""
   const location = searchParams.get("location") || ""
+  const city = searchParams.get("city") || ""
+  const organization = searchParams.get("organization") || ""
   const page = Number.parseInt(searchParams.get("page") || "1")
 
   // Use TanStack Query to fetch tenders
@@ -26,6 +28,8 @@ export default function TendersPageContent({ params }: TendersPageContentProps) 
     search,
     category,
     location,
+    city,
+    organization,
     page,
     limit: 20,
   })
@@ -65,6 +69,8 @@ export default function TendersPageContent({ params }: TendersPageContentProps) 
     search,
     category,
     location,
+    city,
+    organization,
     page: page.toString(),
   }
 
@@ -82,11 +88,11 @@ export default function TendersPageContent({ params }: TendersPageContentProps) 
             <p className="mt-2 text-gray-600">Loading tenders...</p>
           </div>
         ) : (
-          <TendersListing 
-            locale={locale} 
-            dict={dict} 
-            initialData={tendersData || { tenders: [], total: 0, page: 1, limit: 20 }} 
-            searchParams={searchParamsObj} 
+          <TendersListing
+            locale={locale}
+            dict={dict}
+            initialData={tendersData || { tenders: [], total: 0, page: 1, limit: 20 }}
+            searchParams={searchParamsObj}
           />
         )}
       </div>

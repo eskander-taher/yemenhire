@@ -83,7 +83,7 @@ export function JobCard({ job, locale, dict }: JobCardProps) {
 
         {/* Content */}
         <div className="p-6">
-          <p className="text-gray-600 mb-6 leading-relaxed line-clamp-3">
+          <p className={`text-gray-600 mb-6 leading-relaxed line-clamp-3 ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}>
             {job.description || "No description available."}
           </p>
 

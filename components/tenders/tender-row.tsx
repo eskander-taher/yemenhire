@@ -15,6 +15,8 @@ interface TenderRowProps {
 }
 
 export function TenderRow({ tender, locale, dict }: TenderRowProps) {
+  const isRTL = locale === "ar"
+
   const getTenderTypeColor = (type?: string) => {
     switch (type) {
       case "open":
@@ -39,68 +41,70 @@ export function TenderRow({ tender, locale, dict }: TenderRowProps) {
     : null
 
   return (
-    <div className="grid grid-cols-12 gap-4 p-4 hover:bg-gray-50 transition-colors">
+    <tr className="hover:bg-gray-50 transition-colors">
       {/* Published Date */}
-      <div className="col-span-2 text-sm text-gray-600">
-        {formatDate(displayDate, locale, { month: "short", day: "numeric" })}
-      </div>
+      <td className={`px-6 py-4 whitespace-nowrap ${isRTL ? 'text-right' : 'text-left'}`}>
+        <div className="text-sm text-gray-600">
+          {formatDate(displayDate, locale, { month: "short", day: "numeric" })}
+        </div>
+      </td>
 
       {/* Organization */}
-      <div className="col-span-2">
-        <div className="flex items-center">
-          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden mr-2">
-            <Image
-              src="/placeholder.svg?height=32&width=32"
-              alt={tender.organization || "Organization"}
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
-          </div>
-          <span className="text-sm text-gray-900 truncate">{tender.organization || "Organization"}</span>
+      <td className={`px-6 py-4 whitespace-nowrap ${isRTL ? 'text-right' : 'text-left'}`}>
+        <div className={`flex items-center ${isRTL ? ' justify-end' : 'justify-start'}`}>
+          <span className={`text-sm text-gray-900 truncate ${isRTL ? 'mr-2' : 'ml-2'}`}>
+            {tender.organization || "Organization"}
+          </span>
         </div>
-      </div>
+      </td>
 
       {/* Tender Title */}
-      <div className="col-span-3">
+      <td className={`px-6 py-4 ${isRTL ? 'text-right' : 'text-left'}`}>
         <Link
           href={`/${locale}/tenders/${tender._id}`}
           className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
         >
           {tender.title}
         </Link>
-      </div>
+      </td>
 
       {/* Location */}
-      <div className="col-span-2 text-sm text-gray-600">{tender.location}</div>
+      <td className={`px-6 py-4 whitespace-nowrap ${isRTL ? 'text-right' : 'text-left'}`}>
+        <div className="text-sm text-gray-600">{tender.location}</div>
+      </td>
 
       {/* Deadline */}
-      <div className="col-span-2 text-sm">
+      <td className={`px-6 py-4 whitespace-nowrap ${isRTL ? 'text-right' : 'text-left'}`}>
         {deadlineDate ? (
           <div className="space-y-1">
-            <div className={daysRemaining && daysRemaining <= 7 ? "text-red-600 font-medium" : "text-gray-600"}>
+            <div className={`text-sm ${daysRemaining && daysRemaining <= 7 ? "text-red-600 font-medium" : "text-gray-600"}`}>
               {formatDate(deadlineDate, locale, { month: "short", day: "numeric" })}
             </div>
             {daysRemaining !== null && (
               <div className={`text-xs ${daysRemaining <= 7 ? "text-red-500" : "text-gray-500"}`}>
-                {daysRemaining > 0 ? `${daysRemaining} days left` : "Expired"}
+                {daysRemaining > 0
+                  ? `${daysRemaining} ${locale === 'ar' ? 'أيام متبقية' : 'days left'}`
+                  : locale === 'ar' ? 'منتهية' : 'Expired'
+                }
               </div>
             )}
           </div>
         ) : (
-          <span className="text-gray-400">No deadline</span>
+          <span className="text-sm text-gray-400">
+            {locale === 'ar' ? 'لا يوجد موعد نهائي' : 'No deadline'}
+          </span>
         )}
-      </div>
+      </td>
 
       {/* View Button */}
-      <div className="col-span-1 flex items-center justify-center">
+      <td className="px-6 py-4 whitespace-nowrap text-center">
         <Link href={`/${locale}/tenders/${tender._id}`}>
-          <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-black font-medium">
-            <Eye className="w-4 h-4 mr-1" />
-            View
+          <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
+            <Eye className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+            {dict.tenders?.details?.view || dict.common?.view || "View"}
           </Button>
         </Link>
-      </div>
-    </div>
+      </td>
+    </tr>
   )
 }

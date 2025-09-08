@@ -21,7 +21,7 @@ const cairo = Cairo({
 })
 
 export const metadata: Metadata = {
-  title: "YemenHire - Jobs & Tenders Platform",
+  title: "YemenHires - Jobs & Tenders Platform",
   description: "Find jobs and tenders in Yemen. Post your opportunities and connect with talent.",
 }
 
@@ -41,7 +41,7 @@ export default async function RootLayout({
   const isRTL = locale === "ar"
 
   return (
-    <html lang={locale} dir={isRTL ? "rtl" : "ltr"} className={`${inter.variable} ${cairo.variable}`} suppressHydrationWarning>
+    <html lang={locale} className={`${inter.variable} ${cairo.variable}`} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>

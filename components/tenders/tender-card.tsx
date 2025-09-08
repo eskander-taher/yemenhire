@@ -43,7 +43,7 @@ export function TenderCard({ tender, locale, dict }: TenderCardProps) {
             </div>
 
             <p
-              className="text-gray-600 mb-4 overflow-hidden"
+              className={`text-gray-600 mb-4 overflow-hidden ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}
               style={{
                 display: "-webkit-box",
                 WebkitLineClamp: 2,

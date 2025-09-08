@@ -1,9 +1,10 @@
 import axios from "axios";
 
 // Direct connection to Express server - no proxy
-const baseURL = process.env.NODE_ENV === "development" 
-  ? "http://localhost:5000/api" 
-  : "https://api.yemenhires.com/api";
+const baseURL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000/api"
+    : "https://api.yemenhires.com/api";
 
 // Create axios instance with base configuration for direct Express server calls
 export const apiClient = axios.create({
@@ -115,6 +116,8 @@ export const jobsApi = {
       limit?: number;
       search?: string;
       location?: string;
+      city?: string;
+      organization?: string;
       category?: string;
       type?: string;
     } = {}
@@ -164,6 +167,8 @@ export const tendersApi = {
       limit?: number;
       search?: string;
       location?: string;
+      city?: string;
+      organization?: string;
       category?: string;
     } = {}
   ): Promise<TendersResponse> => {

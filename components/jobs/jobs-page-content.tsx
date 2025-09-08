@@ -19,6 +19,8 @@ export default function JobsPageContent({ params }: JobsPageContentProps) {
   const search = searchParams.get("search") || ""
   const category = searchParams.get("category") || ""
   const location = searchParams.get("location") || ""
+  const city = searchParams.get("city") || ""
+  const organization = searchParams.get("organization") || ""
   const type = searchParams.get("type") || ""
   const page = Number.parseInt(searchParams.get("page") || "1")
 
@@ -27,6 +29,8 @@ export default function JobsPageContent({ params }: JobsPageContentProps) {
     search,
     category,
     location,
+    city,
+    organization,
     type,
     page,
     limit: 20,
@@ -67,6 +71,8 @@ export default function JobsPageContent({ params }: JobsPageContentProps) {
     search,
     category,
     location,
+    city,
+    organization,
     type,
     page: page.toString(),
   }
@@ -85,11 +91,11 @@ export default function JobsPageContent({ params }: JobsPageContentProps) {
             <p className="mt-2 text-gray-600">Loading jobs...</p>
           </div>
         ) : (
-          <JobsListing 
-            locale={locale} 
-            dict={dict} 
-            initialData={jobsData || { jobs: [], total: 0, page: 1, limit: 20 }} 
-            searchParams={searchParamsObj} 
+          <JobsListing
+            locale={locale}
+            dict={dict}
+            initialData={jobsData || { jobs: [], total: 0, page: 1, limit: 20 }}
+            searchParams={searchParamsObj}
           />
         )}
       </div>

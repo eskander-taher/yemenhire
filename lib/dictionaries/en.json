@@ -22,7 +22,7 @@
       "applications": "Applications"
     },
     "features": {
-      "title": "Why Choose YemenHire?",
+      "title": "Why Choose YemenHires?",
       "subtitle": "Your trusted platform for career opportunities and business growth",
       "items": [
         {
@@ -47,6 +47,8 @@
     "filters": {
       "category": "Category",
       "location": "Location",
+      "city": "City",
+      "organization": "Organization",
       "type": "Job Type",
       "salary": "Salary Range"
     },
@@ -66,6 +68,19 @@
       "apply": "Apply Now",
       "description": "Job Description",
       "requirements": "Requirements"
+    },
+    "guidelines": {
+      "title": "Key Guidelines",
+      "items": [
+        "Carefully following the application instructions listed in each job posting will significantly improve the chances of your CV being reviewed.",
+        "When submitting your application by email, always include the job title and location in the subject line.",
+        "To stand out, customize both your CV and cover letter so that they align with the specific requirements of the position."
+      ]
+    },
+    "relatedJobs": {
+      "title": "Related Jobs",
+      "viewAll": "View All Jobs",
+      "noRelated": "No related jobs found"
     }
   },
   "tenders": {
@@ -75,6 +90,8 @@
     "filters": {
       "category": "Category",
       "location": "Location",
+      "city": "City",
+      "organization": "Organization",
       "budget": "Budget Range"
     },
     "details": {
@@ -115,7 +132,7 @@
       "categoryPlaceholder": "Select category",
       "instructions": "Application Instructions",
       "instructionsPlaceholder": "Provide specific instructions for applicants...",
-      "submissionInstructions": "Submission Instructions", 
+      "submissionInstructions": "Submission Instructions",
       "submissionInstructionsPlaceholder": "Provide specific instructions for tender submissions...",
       "documents": "Supporting Documents",
       "documentsPlaceholder": "Upload relevant documents (PDF, DOC, DOCX)",
@@ -127,7 +144,7 @@
       "tenderSubmitError": "Tender posting failed. Please contact support or try again later.",
       "categories": {
         "technology": "Technology",
-        "healthcare": "Healthcare", 
+        "healthcare": "Healthcare",
         "education": "Education",
         "finance": "Finance",
         "marketing": "Marketing",
@@ -154,7 +171,10 @@
     "success": "Success!",
     "thankYou": "Thank You!",
     "posted": "Posted",
-    "ago": "ago"
+    "ago": "ago",
+    "view": "View",
+    "table": "Table",
+    "cards": "Cards"
   },
   "footer": {
     "description": "Your trusted platform for finding jobs and tenders in Yemen",

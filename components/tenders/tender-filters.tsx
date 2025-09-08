@@ -13,12 +13,19 @@ interface TenderFiltersProps {
     search: string
     category: string
     location: string
+    city: string
+    organization: string
   }
   onFilterChange: (filters: any) => void
+  availableOptions?: {
+    categories?: string[]
+    cities?: string[]
+    organizations?: string[]
+  }
 }
 
-export function TenderFilters({ locale, dict, filters, onFilterChange }: TenderFiltersProps) {
-  const categories = [
+export function TenderFilters({ locale, dict, filters, onFilterChange, availableOptions }: TenderFiltersProps) {
+  const categories = availableOptions?.categories || [
     "Construction",
     "IT Services",
     "Consulting",
@@ -28,8 +35,24 @@ export function TenderFilters({ locale, dict, filters, onFilterChange }: TenderF
     "Security",
     "Other",
   ]
-
+  const cities = availableOptions?.cities || ["Sana'a", "Aden", "Taiz", "Hodeidah", "Ibb", "Dhamar", "Mukalla", "Nationwide"]
+  const organizations = availableOptions?.organizations || []
   const locations = ["Sana'a", "Aden", "Taiz", "Hodeidah", "Ibb", "Dhamar", "Mukalla", "Nationwide"]
+
+  const localizeCategory = (category: string) => {
+    if (locale !== "ar") return category
+    const map: Record<string, string> = {
+      Construction: dict?.advertise?.form?.categories?.construction || "البناء والتشييد",
+      "IT Services": "الخدمات التقنية",
+      Consulting: dict?.advertise?.form?.categories?.consulting || "الاستشارات",
+      Healthcare: dict?.advertise?.form?.categories?.healthcare || "الرعاية الصحية",
+      Education: dict?.advertise?.form?.categories?.education || "التعليم",
+      Transportation: dict?.advertise?.form?.categories?.transportation || "النقل والمواصلات",
+      Security: "الأمن",
+      Other: dict?.advertise?.form?.categories?.other || "أخرى",
+    }
+    return map[category] || category
+  }
 
   return (
     <Card>
@@ -64,7 +87,7 @@ export function TenderFilters({ locale, dict, filters, onFilterChange }: TenderF
               <SelectItem value="all">All Categories</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category} value={category.toLowerCase().replace(/\s+/g, "-")}>
-                  {category}
+                  {localizeCategory(category)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -89,11 +112,47 @@ export function TenderFilters({ locale, dict, filters, onFilterChange }: TenderF
           </Select>
         </div>
 
+        {/* City */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{dict.tenders.filters.city}</label>
+          <Select value={filters.city} onValueChange={(value) => onFilterChange({ city: value })}>
+            <SelectTrigger>
+              <SelectValue placeholder="All Cities" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Cities</SelectItem>
+              {cities.map((city) => (
+                <SelectItem key={city} value={city}>
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Organization */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{dict.tenders.filters.organization}</label>
+          <Select value={filters.organization} onValueChange={(value) => onFilterChange({ organization: value })}>
+            <SelectTrigger>
+              <SelectValue placeholder="All Organizations" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Organizations</SelectItem>
+              {organizations.map((org) => (
+                <SelectItem key={org} value={org}>
+                  {org}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Clear Filters */}
         <Button
           variant="outline"
           className="w-full bg-transparent"
-          onClick={() => onFilterChange({ search: "", category: "", location: "" })}
+          onClick={() => onFilterChange({ search: "", category: "", location: "", city: "", organization: "" })}
         >
           Clear Filters
         </Button>

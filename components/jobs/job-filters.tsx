@@ -13,15 +13,43 @@ interface JobFiltersProps {
     search: string
     category: string
     location: string
+    city: string
+    organization: string
     type: string
   }
   onFilterChange: (filters: any) => void
+  availableOptions?: {
+    categories?: string[]
+    cities?: string[]
+    organizations?: string[]
+  }
 }
 
-export function JobFilters({ locale, dict, filters, onFilterChange }: JobFiltersProps) {
-  const categories = ["Technology", "Healthcare", "Education", "Finance", "Marketing", "Engineering", "Sales", "Other"]
-
+export function JobFilters({ locale, dict, filters, onFilterChange, availableOptions }: JobFiltersProps) {
+  const categories = availableOptions?.categories || ["Technology", "Healthcare", "Education", "Finance", "Marketing", "Engineering", "Sales", "Other"]
+  const cities = availableOptions?.cities || ["Sana'a", "Aden", "Taiz", "Hodeidah", "Ibb", "Dhamar", "Mukalla", "Remote"]
+  const organizations = availableOptions?.organizations || []
   const locations = ["Sana'a", "Aden", "Taiz", "Hodeidah", "Ibb", "Dhamar", "Mukalla", "Remote"]
+
+  const localizeCategory = (category: string) => {
+    if (locale !== "ar") return category
+    const map: Record<string, string> = {
+      Technology: dict?.advertise?.form?.categories?.technology || "التكنولوجيا",
+      Healthcare: dict?.advertise?.form?.categories?.healthcare || "الرعاية الصحية",
+      Education: dict?.advertise?.form?.categories?.education || "التعليم",
+      Finance: dict?.advertise?.form?.categories?.finance || "المالية",
+      Marketing: dict?.advertise?.form?.categories?.marketing || "التسويق",
+      Engineering: dict?.advertise?.form?.categories?.engineering || "الهندسة",
+      Construction: dict?.advertise?.form?.categories?.construction || "البناء والتشييد",
+      Consulting: dict?.advertise?.form?.categories?.consulting || "الاستشارات",
+      Transportation: dict?.advertise?.form?.categories?.transportation || "النقل والمواصلات",
+      Other: dict?.advertise?.form?.categories?.other || "أخرى",
+      Sales: "المبيعات",
+      "IT Services": "الخدمات التقنية",
+      Security: "الأمن",
+    }
+    return map[category] || category
+  }
 
   const jobTypes = [
     { value: "full-time", label: dict.jobs.types["full-time"] },
@@ -63,7 +91,7 @@ export function JobFilters({ locale, dict, filters, onFilterChange }: JobFilters
               <SelectItem value="all">All Categories</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category} value={category}>
-                  {category}
+                  {localizeCategory(category)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -82,6 +110,42 @@ export function JobFilters({ locale, dict, filters, onFilterChange }: JobFilters
               {locations.map((location) => (
                 <SelectItem key={location} value={location}>
                   {location}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* City */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{dict.jobs.filters.city}</label>
+          <Select value={filters.city} onValueChange={(value) => onFilterChange({ city: value })}>
+            <SelectTrigger>
+              <SelectValue placeholder="All Cities" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Cities</SelectItem>
+              {cities.map((city) => (
+                <SelectItem key={city} value={city}>
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Organization */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">{dict.jobs.filters.organization}</label>
+          <Select value={filters.organization} onValueChange={(value) => onFilterChange({ organization: value })}>
+            <SelectTrigger>
+              <SelectValue placeholder="All Organizations" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Organizations</SelectItem>
+              {organizations.map((org) => (
+                <SelectItem key={org} value={org}>
+                  {org}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -110,7 +174,7 @@ export function JobFilters({ locale, dict, filters, onFilterChange }: JobFilters
         <Button
           variant="outline"
           className="w-full bg-transparent"
-          onClick={() => onFilterChange({ search: "", category: "", location: "", type: "" })}
+          onClick={() => onFilterChange({ search: "", category: "", location: "", city: "", organization: "", type: "" })}
         >
           Clear Filters
         </Button>
