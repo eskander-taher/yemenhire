@@ -20,9 +20,9 @@ export function TenderCard({ tender, locale, dict }: TenderCardProps) {
           <div className="flex-1">
             <div className="flex items-start justify-between mb-3">
               <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors">
-                <Link href={`/${locale}/tenders/${tender.id}`}>{tender.title}</Link>
+                <Link href={`/${locale}/tenders/${tender._id}`}>{tender.title}</Link>
               </h3>
-              <Badge className="bg-green-100 text-green-800">{tender.type}</Badge>
+              <Badge className="bg-green-100 text-green-800">{tender.category || "Tender"}</Badge>
             </div>
 
             <div className="flex items-center space-x-4 rtl:space-x-reverse text-sm text-gray-600 mb-3">
@@ -57,11 +57,11 @@ export function TenderCard({ tender, locale, dict }: TenderCardProps) {
               <div className="flex items-center space-x-1 rtl:space-x-reverse text-sm text-gray-500">
                 <Calendar className="w-4 h-4" />
                 <span>
-                  {dict.common.posted} {formatDate(tender.posted_date, locale)}
+                  {dict.common.posted} {formatDate(tender.publishedAt || tender.createdAt, locale)}
                 </span>
               </div>
 
-              <Link href={`/${locale}/tenders/${tender.id}`}>
+              <Link href={`/${locale}/tenders/${tender._id}`}>
                 <Button size="sm">{dict.tenders.details.submit}</Button>
               </Link>
             </div>
