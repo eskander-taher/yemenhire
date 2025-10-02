@@ -116,15 +116,15 @@ export function HeroSection({ locale, dict }: HeroSectionProps) {
           <div className="flex flex-wrap justify-center items-center gap-8 text-gray-500 animate-slide-up [animation-delay:0.3s]">
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
               <Users className="w-5 h-5" />
-              <span className="text-sm font-medium">Trusted by 10,000+ Users</span>
+              <span className="text-sm font-medium">{dict.home.hero.trustIndicators.trustedUsers}</span>
             </div>
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
               <Award className="w-5 h-5" />
-              <span className="text-sm font-medium">Verified Opportunities</span>
+              <span className="text-sm font-medium">{dict.home.hero.trustIndicators.verifiedOpportunities}</span>
             </div>
             <div className="flex items-center space-x-2 rtl:space-x-reverse">
               <TrendingUp className="w-5 h-5" />
-              <span className="text-sm font-medium">95% Success Rate</span>
+              <span className="text-sm font-medium">{dict.home.hero.trustIndicators.successRate}</span>
             </div>
           </div>
         </div>

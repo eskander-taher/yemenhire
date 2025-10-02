@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import { Briefcase, FileText, Building, Users } from "lucide-react"
+import Link from "next/link"
 
 interface StatsSectionProps {
   locale: string
@@ -77,6 +78,7 @@ export function StatsSection({ locale, dict, stats: initialStats }: StatsSection
       color: "from-blue-500 to-blue-600",
       bgColor: "bg-blue-50",
       iconColor: "text-blue-600",
+      href: `/${locale}/jobs`,
     },
     {
       label: dict.home.stats.tenders,
@@ -85,6 +87,7 @@ export function StatsSection({ locale, dict, stats: initialStats }: StatsSection
       color: "from-green-500 to-green-600",
       bgColor: "bg-green-50",
       iconColor: "text-green-600",
+      href: `/${locale}/tenders`,
     },
     {
       label: dict.home.stats.companies,
@@ -93,6 +96,7 @@ export function StatsSection({ locale, dict, stats: initialStats }: StatsSection
       color: "from-purple-500 to-purple-600",
       bgColor: "bg-purple-50",
       iconColor: "text-purple-600",
+      href: `/${locale}/advertise`,
     },
     {
       label: dict.home.stats.applications,
@@ -101,6 +105,7 @@ export function StatsSection({ locale, dict, stats: initialStats }: StatsSection
       color: "from-orange-500 to-orange-600",
       bgColor: "bg-orange-50",
       iconColor: "text-orange-600",
+      href: `/${locale}/jobs`,
     },
   ]
 
@@ -115,13 +120,14 @@ export function StatsSection({ locale, dict, stats: initialStats }: StatsSection
           {statsData.map((stat, index) => {
             const Icon = stat.icon
             return (
-              <div
+              <Link
                 key={index}
-                className={`text-center group hover-lift ${isVisible ? "animate-slide-up" : "opacity-0"}`}
+                href={stat.href}
+                className={`text-center group hover-lift cursor-pointer transition-all duration-300 hover:scale-105 ${isVisible ? "animate-slide-up" : "opacity-0"}`}
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div
-                  className={`inline-flex items-center justify-center w-16 h-16 ${stat.bgColor} rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  className={`inline-flex items-center justify-center w-16 h-16 ${stat.bgColor} rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300 group-hover:shadow-lg`}
                 >
                   <Icon className={`w-8 h-8 ${stat.iconColor}`} />
                 </div>
@@ -131,8 +137,8 @@ export function StatsSection({ locale, dict, stats: initialStats }: StatsSection
                   {stat.value.toLocaleString()}
                   {stat.value > 0 ? "+" : ""}
                 </div>
-                <div className="text-gray-600 font-medium text-lg">{stat.label}</div>
-              </div>
+                <div className="text-gray-600 font-medium text-lg group-hover:text-gray-800 transition-colors duration-300">{stat.label}</div>
+              </Link>
             )
           })}
         </div>

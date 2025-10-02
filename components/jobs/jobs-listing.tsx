@@ -166,7 +166,7 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
             <span className="text-gray-600 ml-1">last 7 days</span>
           </div>
         </div>
-        {/* <div className="relative w-full md:w-64">
+        {/* <div className="relative w-full md:w-64 p-2">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             placeholder={dict.jobs?.searchPlaceholder || "Search jobs..."}

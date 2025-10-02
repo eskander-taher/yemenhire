@@ -1,4 +1,5 @@
 import { Shield, Zap, Bell, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 interface FeaturesSectionProps {
   locale: string
@@ -13,6 +14,7 @@ export function FeaturesSection({ locale, dict }: FeaturesSectionProps) {
       description: dict.home.features.items[0].description,
       gradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-50 to-cyan-50",
+      href: `/${locale}/jobs`,
     },
     {
       icon: Zap,
@@ -20,6 +22,7 @@ export function FeaturesSection({ locale, dict }: FeaturesSectionProps) {
       description: dict.home.features.items[1].description,
       gradient: "from-green-500 to-emerald-500",
       bgGradient: "from-green-50 to-emerald-50",
+      href: `/${locale}/advertise`,
     },
     {
       icon: Bell,
@@ -27,6 +30,7 @@ export function FeaturesSection({ locale, dict }: FeaturesSectionProps) {
       description: dict.home.features.items[2].description,
       gradient: "from-purple-500 to-pink-500",
       bgGradient: "from-purple-50 to-pink-50",
+      href: `/${locale}/jobs`,
     },
   ]
 
@@ -51,9 +55,10 @@ export function FeaturesSection({ locale, dict }: FeaturesSectionProps) {
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
-              <div
+              <Link
                 key={index}
-                className={`group hover-lift animate-slide-up`}
+                href={feature.href}
+                className={`group hover-lift animate-slide-up cursor-pointer transition-all duration-300 hover:scale-105`}
                 style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <div
@@ -80,12 +85,12 @@ export function FeaturesSection({ locale, dict }: FeaturesSectionProps) {
                     </p>
 
                     <div className="flex items-center text-sm font-semibold text-gray-500 group-hover:text-gray-700 transition-colors">
-                      <span>Learn more</span>
+                      <span>{dict.home.features.learnMore}</span>
                       <ArrowRight className="w-4 h-4 ml-2 rtl:mr-2 rtl:ml-0 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             )
           })}
         </div>

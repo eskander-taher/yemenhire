@@ -22,7 +22,7 @@ const cairo = Cairo({
 
 export const metadata: Metadata = {
   title: "YemenHires - Jobs & Tenders Platform",
-  description: "Find jobs and tenders in Yemen. Post your opportunities and connect with talent.",
+  description: "Find jobs and tenders in Yemen. Post your opportunities and connect with talent",
 }
 
 export async function generateStaticParams() {

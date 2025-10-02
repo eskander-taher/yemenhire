@@ -13,7 +13,12 @@
       "searchPlaceholder": "Search jobs, tenders, or companies...",
       "searchButton": "Search",
       "jobsButton": "Browse Jobs",
-      "tendersButton": "Browse Tenders"
+      "tendersButton": "Browse Tenders",
+      "trustIndicators": {
+        "trustedUsers": "Trusted by 10,000+ Users",
+        "verifiedOpportunities": "Verified Opportunities",
+        "successRate": "95% Success Rate"
+      }
     },
     "stats": {
       "jobs": "Active Jobs",
@@ -24,6 +29,7 @@
     "features": {
       "title": "Why Choose YemenHires?",
       "subtitle": "Your trusted platform for career opportunities and business growth",
+      "learnMore": "Learn more",
       "items": [
         {
           "title": "Verified Opportunities",
