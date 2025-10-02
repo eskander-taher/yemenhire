@@ -88,3 +88,51 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Table styling for Tiptap */
+.ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  min-width: 120px;
+}
+
+.ProseMirror th {
+  background-color: #f9fafb;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Style for tables in both editor and rendered content */
+.prose table,
+.ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  table-layout: fixed;
+}
+
+.prose th,
+.prose td,
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid #d1d5db; /* Tailwind gray-300 */
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.prose th,
+.ProseMirror th {
+  background-color: #f3f4f6; /* Tailwind gray-100 */
+  font-weight: 600;
+  font-size: 0.75rem; /* يعادل text-xs في Tailwind */
+  padding: 6px; /* تصغير الحواف */
+}

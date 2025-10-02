@@ -1,7 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Cairo, Inter } from "next/font/google"
-import "./globals.css"
+import "../../styles/globals.css"
 import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
 import { getDictionary } from "@/lib/dictionaries"

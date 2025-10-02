@@ -38,22 +38,27 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
   const daysRemaining = getDaysRemaining(tender.deadline)
 
   const getFileDownloadUrl = (filename: string) => {
+
+    if (filename.startsWith("http://") || filename.startsWith("https://")) {
+      return filename
+    }
+
     const baseUrl = process.env.NODE_ENV === "development"
       ? "http://localhost:5000"
       : "https://api.yemenhires.com"
     return `${baseUrl}/uploads/${filename}`
   }
 
-  const handleDownload = (filename: string, index: number) => {
-    const url = getFileDownloadUrl(filename)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `document-${index + 1}`
-    link.target = '_blank'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+  // const handleDownload = (filename: string, index: number) => {
+  //   const url = getFileDownloadUrl(filename)
+  //   const link = document.createElement('a')
+  //   link.href = url
+  //   link.download = `document-${index + 1}`
+  //   link.target = '_blank'
+  //   document.body.appendChild(link)
+  //   link.click()
+  //   document.body.removeChild(link)
+  // }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -129,7 +134,7 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
               </CardHeader>
               <CardContent>
                 <div
-                  className={`text-gray-700 leading-relaxed ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}
+                  className={`text-gray-700 leading-relaxed prose  ${locale === 'ar' ? 'rtl-text' : 'ltr-text'}`}
                   dangerouslySetInnerHTML={{ __html: tender.instructions || '' }}
                 />
               </CardContent>
@@ -153,7 +158,7 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
                         <FileText className="w-5 h-5 text-green-600" />
                         <span className="text-gray-700 font-medium">Document {index + 1}</span>
                       </div>
-                      <Button
+                      {/* <Button
                         size="sm"
                         variant="outline"
                         onClick={() => handleDownload(doc, index)}
@@ -161,7 +166,23 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
                       >
                         <Download className="w-4 h-4 mr-1" />
                         Download
-                      </Button>
+                      </Button> */}
+
+                      <a
+                        href={getFileDownloadUrl(doc)}
+                        download={`document-${index + 1}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+                        >
+                          <Download className="w-4 h-4 mr-1" />
+                          Download
+                        </Button>
+                      </a>
                     </div>
                   ))}
                 </div>
