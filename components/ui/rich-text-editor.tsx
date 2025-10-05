@@ -3,6 +3,7 @@
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Underline from "@tiptap/extension-underline"
+import TextAlign from "@tiptap/extension-text-align"
 import { Table } from "@tiptap/extension-table"
 import TableRow from "@tiptap/extension-table-row"
 import TableHeader from "@tiptap/extension-table-header"
@@ -19,6 +20,10 @@ import {
   Redo,
   Plus,
   Minus,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
 } from "lucide-react"
 
 import { Button } from "./button"
@@ -39,6 +44,10 @@ export function RichTextEditor({
     extensions: [
       StarterKit,
       Underline,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+        alignments: ["left", "center", "right", "justify"],
+      }),
       Table.configure({
         resizable: true,
       }),
@@ -121,6 +130,37 @@ export function RichTextEditor({
           title="Numbered List"
         >
           <ListOrdered className="h-4 w-4" />
+        </MenuButton>
+
+        {/* Text Alignment */}
+        <div className="w-px bg-gray-300 mx-1" />
+        <MenuButton
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          isActive={editor.isActive({ textAlign: "left" })}
+          title="Align Left"
+        >
+          <AlignLeft className="h-4 w-4" />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          isActive={editor.isActive({ textAlign: "center" })}
+          title="Align Center"
+        >
+          <AlignCenter className="h-4 w-4" />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          isActive={editor.isActive({ textAlign: "right" })}
+          title="Align Right"
+        >
+          <AlignRight className="h-4 w-4" />
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().setTextAlign("justify").run()}
+          isActive={editor.isActive({ textAlign: "justify" })}
+          title="Justify"
+        >
+          <AlignJustify className="h-4 w-4" />
         </MenuButton>
 
         {/* Table controls */}
