@@ -11,10 +11,11 @@ function getLocale(): string {
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Skip middleware for API routes, static files, and Next.js internals
+  // Skip middleware for API routes, static files, Next.js internals, and admin routes
   if (
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||
+    pathname.startsWith("/admin") ||
     pathname.includes(".")
   ) {
     return NextResponse.next();

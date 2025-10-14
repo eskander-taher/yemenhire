@@ -16,21 +16,6 @@ const nextConfig = {
   outputFileTracingRoot: __dirname,
   images: {
     unoptimized: true, // Temporarily disable optimization to fix the error
-    // localPatterns: [
-    //   {
-    //     pathname: "/yemenhire_logo_short.png",
-    //   },
-    //   {
-    //     pathname: "/yemenhire_logo.png",
-    //   },
-    //   {
-    //     pathname: "/placeholder.svg",
-    //     search: "**",
-    //   },
-    //   {
-    //     pathname: "/placeholder-**",
-    //   },
-    // ],
     remotePatterns: [
       {
         protocol: "https",

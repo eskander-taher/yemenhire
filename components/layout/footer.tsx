@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin, Heart, Sparkles } from "lucide-react"
+import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin, Heart, Sparkles, Shield } from "lucide-react"
 import Image from "next/image";
 
 interface FooterProps {
@@ -44,7 +44,7 @@ export function Footer({ locale, dict }: FooterProps) {
 							<div className="relative">
 								<div className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
 									<Image
-										src="/yemenhire_logo_short.png"
+										src="/yemenhires_logo_short.png"
 										alt="YemenHire Logo"
 										width={40}
 										height={40}
@@ -106,13 +106,13 @@ export function Footer({ locale, dict }: FooterProps) {
 								<div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center group-hover:bg-blue-600 transition-colors">
 									<Mail className="w-4 h-4" />
 								</div>
-								<span>info@yemenhire.com</span>
+								<span>info@yemenhires.com</span>
 							</div>
 							<div className="flex items-center space-x-3 rtl:space-x-reverse text-gray-300 group">
 								<div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center group-hover:bg-green-600 transition-colors">
 									<Phone className="w-4 h-4" />
 								</div>
-								<span>00967771217267</span>
+								<span dir="ltr">+967771217267</span>
 							</div>
 							<div className="flex items-center space-x-3 rtl:space-x-reverse text-gray-300 group">
 								<div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center group-hover:bg-green-600 transition-colors">
@@ -130,12 +130,25 @@ export function Footer({ locale, dict }: FooterProps) {
 					</div>
 				</div>
 
-				<div className="border-t border-gray-700 mt-12 pt-8 text-center">
-					<p className="text-gray-400 flex items-center justify-center space-x-2 rtl:space-x-reverse">
-						<span>&copy; 2025 YemenHires. {dict.footer.rights}</span>
-						<Heart className="w-4 h-4 text-red-500 animate-pulse" />
-						<span>Made with love in Yemen</span>
-					</p>
+				<div className="border-t border-gray-700 mt-12 pt-8">
+					<div className="flex flex-col md:flex-row items-center justify-between gap-4">
+						<p className="text-gray-400 flex items-center space-x-2 rtl:space-x-reverse">
+							<span>&copy; 2025 YemenHires. {dict.footer.rights}</span>
+							<Heart className="w-4 h-4 text-red-500 animate-pulse" />
+							<span>Made with love in Yemen</span>
+						</p>
+						
+						{/* Admin Access Button */}
+						<Link
+							href="/admin"
+							className="group flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 bg-gray-800/50 hover:bg-gray-700 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all duration-300"
+						>
+							<Shield className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors" />
+							<span className="text-sm text-gray-400 group-hover:text-blue-400 transition-colors">
+								Admin Panel
+							</span>
+						</Link>
+					</div>
 				</div>
 			</div>
 		</footer>
