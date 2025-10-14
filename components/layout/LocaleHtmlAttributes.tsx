@@ -11,22 +11,36 @@ export function LocaleHtmlAttributes({ locale }: LocaleHtmlAttributesProps) {
     const html = document.documentElement;
     const isRTL = locale === "ar";
     
-    // Set language
+    // Set language and direction
     html.setAttribute("lang", locale);
-    
-    // Set direction
     html.setAttribute("dir", isRTL ? "rtl" : "ltr");
     
-    // Add canonical link
-    const existingCanonical = document.querySelector('link[rel="canonical"]');
-    if (existingCanonical) {
-      existingCanonical.setAttribute("href", `https://yemenhires.com/${locale}`);
+    // Track elements we add for cleanup
+    const addedElements: Element[] = [];
+    
+    // Handle canonical link
+    let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (canonicalLink) {
+      canonicalLink.setAttribute("href", `https://yemenhires.com/${locale}`);
     } else {
-      const canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      canonical.href = `https://yemenhires.com/${locale}`;
-      document.head.appendChild(canonical);
+      canonicalLink = document.createElement("link");
+      canonicalLink.rel = "canonical";
+      canonicalLink.href = `https://yemenhires.com/${locale}`;
+      canonicalLink.setAttribute("data-locale-managed", "true");
+      document.head.appendChild(canonicalLink);
+      addedElements.push(canonicalLink);
     }
+    
+    // Remove old hreflang links safely
+    document.querySelectorAll('link[rel="alternate"][hreflang][data-locale-managed="true"]').forEach((el) => {
+      try {
+        if (el.isConnected) {
+          el.remove();
+        }
+      } catch (e) {
+        // Ignore any errors during removal
+      }
+    });
     
     // Add hreflang links
     const hreflangLinks = [
@@ -35,17 +49,42 @@ export function LocaleHtmlAttributes({ locale }: LocaleHtmlAttributesProps) {
       { lang: "x-default", href: "https://yemenhires.com/ar" },
     ];
     
-    // Remove existing hreflang links
-    document.querySelectorAll('link[rel="alternate"]').forEach((link) => link.remove());
-    
-    // Add new hreflang links
     hreflangLinks.forEach(({ lang, href }) => {
       const link = document.createElement("link");
       link.rel = "alternate";
-      link.hrefLang = lang;
+      link.hreflang = lang;
       link.href = href;
+      link.setAttribute("data-locale-managed", "true");
       document.head.appendChild(link);
+      addedElements.push(link);
     });
+    
+    // Cleanup function
+    return () => {
+      // Small delay to prevent race conditions during navigation
+      setTimeout(() => {
+        try {
+          // Reset to default
+          if (document.documentElement) {
+            document.documentElement.setAttribute("lang", "en");
+            document.documentElement.setAttribute("dir", "ltr");
+          }
+          
+          // Remove added elements using modern .remove() API
+          addedElements.forEach((el) => {
+            try {
+              if (el && el.isConnected) {
+                el.remove();
+              }
+            } catch (e) {
+              // Silently ignore any errors
+            }
+          });
+        } catch (e) {
+          // Silently ignore cleanup errors
+        }
+      }, 100); // 100ms delay to avoid race conditions
+    };
   }, [locale]);
 
   return null;

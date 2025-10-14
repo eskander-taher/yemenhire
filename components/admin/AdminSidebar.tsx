@@ -14,6 +14,8 @@ import {
   Bell,
   ChevronLeft,
   ChevronRight,
+  Home,
+  ExternalLink,
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -94,6 +96,29 @@ export default function AdminSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1">
+        {/* Back to Website Button */}
+        <Link
+          href="/en"
+          className={`group flex items-center rounded-lg transition-all duration-200 text-gray-700 hover:bg-blue-50 hover:text-blue-700 border border-gray-200 hover:border-blue-200 mb-3 ${
+            isCollapsed ? "justify-center p-2" : "px-3 py-2.5"
+          }`}
+          title="Back to Website"
+        >
+          <Home className={`${isCollapsed ? "w-5 h-5" : "w-5 h-5"} text-gray-500 group-hover:text-blue-600`} />
+          {!isCollapsed && (
+            <div className="ml-3 flex-1 flex items-center justify-between">
+              <div>
+                <span className="text-sm font-medium">Back to Website</span>
+                <p className="text-xs text-gray-500 mt-0.5">View Main Site</p>
+              </div>
+              <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-500" />
+            </div>
+          )}
+        </Link>
+
+        {/* Divider */}
+        {!isCollapsed && <div className="border-t border-gray-200 mb-3"></div>}
+
         {navItems.map((item) => {
           const Icon = item.icon;
           return (

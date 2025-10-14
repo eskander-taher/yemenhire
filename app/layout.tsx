@@ -70,7 +70,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-		<html suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable}`}>
+		<html suppressHydrationWarning lang="en" dir="ltr" className={`${GeistSans.variable} ${GeistMono.variable}`}>
 			<head>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<meta name="theme-color" content="#2563eb" />
