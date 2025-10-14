@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
-import { adminAxios, UPLOAD_URL } from "@/lib/admin-api";
+import { adminAxios } from "@/lib/admin-api";
 import AdminLayout from "@/components/admin/AdminLayout";
 import ProtectedAdminRoute from "@/components/admin/ProtectedAdminRoute";
 import {
@@ -356,8 +356,9 @@ export default function TenderDetailsPage() {
                         {tender.documents.map((doc, index) => (
                           <a
                             key={index}
-                            href={`${UPLOAD_URL}/${doc}`}
-                            download
+                            href={doc}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="flex items-center gap-2 p-2 bg-white rounded border hover:bg-gray-50 transition-colors"
                           >
                             <FileText className="w-4 h-4 text-blue-600" />

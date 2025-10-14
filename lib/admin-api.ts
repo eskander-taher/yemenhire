@@ -6,10 +6,6 @@ export const BASE_URL = isDev
   ? "http://localhost:5000/api"
   : "https://api.yemenhires.com/api";
 
-export const UPLOAD_URL = isDev
-  ? "http://localhost:5000/uploads"
-  : "https://api.yemenhires.com/uploads";
-
 export const adminAxios = axios.create({
   baseURL: BASE_URL,
   timeout: 60000, // 60 seconds timeout for file uploads
