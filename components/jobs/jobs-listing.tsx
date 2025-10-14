@@ -4,7 +4,7 @@ import { useState } from "react"
 import { JobRow } from "./job-row"
 import { Button } from "@/components/ui/button"
 import { Pagination } from "@/components/ui/pagination"
-import { Search, Calendar, MapPin, Tag, Sparkles, Filter } from "lucide-react"
+import { Search, Calendar, MapPin, Tag, Sparkles, Filter, AlertCircle } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -305,9 +305,25 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredJobs.map((job) => (
-                  <JobRow key={job._id} job={job} locale={locale} dict={dict} />
-                ))}
+                {filteredJobs.length > 0 ? (
+                  filteredJobs.map((job) => (
+                    <JobRow key={job._id} job={job} locale={locale} dict={dict} />
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="text-center py-16">
+                      <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        {dict.common?.noResults || "No jobs found"}
+                      </h3>
+                      <p className="text-gray-600">
+                        {filters.search || filters.category || filters.city || filters.organization
+                          ? dict.common?.retry || "Try adjusting your search criteria"
+                          : "No jobs are currently available"}
+                      </p>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -316,7 +332,8 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
 
       {/* Card view - always on mobile, on desktop if cards view is selected */}
       <div className={`${desktopView === 'cards' ? 'sm:block' : 'sm:hidden'} space-y-4`}>
-        {filteredJobs.map((job) => {
+        {filteredJobs.length > 0 ? (
+          filteredJobs.map((job) => {
           // Determine if job is new (posted in last 3 days)
           const postedDate = new Date(job.publishedAt || job.createdAt)
           const now = new Date()
@@ -374,7 +391,20 @@ export function JobsListing({ locale, dict, initialData, searchParams }: JobsLis
               </div>
             </div>
           )
-        })}
+        })
+        ) : (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-16 text-center">
+            <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              {dict.common?.noResults || "No jobs found"}
+            </h3>
+            <p className="text-gray-600">
+              {filters.search || filters.category || filters.city || filters.organization
+                ? dict.common?.retry || "Try adjusting your search criteria"
+                : "No jobs are currently available"}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Pagination */}

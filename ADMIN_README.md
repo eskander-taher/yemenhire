@@ -170,3 +170,4 @@ The admin panel will be available at `http://localhost:3000/admin`
 - Toast notifications provide feedback for all actions
 
 
+

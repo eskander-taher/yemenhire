@@ -26,17 +26,9 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
     })
   }
 
-  const getFileDownloadUrl = (filename: string) => {
-    const baseUrl = process.env.NODE_ENV === "development"
-      ? "http://localhost:5000"
-      : "https://api.yemenhires.com"
-    return `${baseUrl}/uploads/${filename}`
-  }
-
   const handleDownload = (filename: string, index: number) => {
-    const url = getFileDownloadUrl(filename)
     const link = document.createElement('a')
-    link.href = url
+    link.href = filename
     link.download = `document-${index + 1}`
     link.target = '_blank'
     document.body.appendChild(link)
@@ -77,7 +69,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
                     </div>
                     <div className="flex items-center">
                       <Calendar className="w-4 h-4 mr-1" />
-                      Posted {formatDate(job.publishedAt || job.createdAt)}
+                      {dict.jobs?.details?.posted || "Posted"} {formatDate(job.publishedAt || job.createdAt)}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -101,7 +93,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
           {/* Job Description */}
           <Card>
             <CardHeader>
-              <CardTitle>Job Description</CardTitle>
+              <CardTitle>{dict.jobs?.details?.jobDescription || "Job Description"}</CardTitle>
             </CardHeader>
             <CardContent className="prose max-w-none">
               <div
@@ -115,7 +107,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
           {job.instructions && (
             <Card>
               <CardHeader>
-                <CardTitle>Application Instructions</CardTitle>
+                <CardTitle>{dict.jobs?.details?.applicationInstructions || "Application Instructions"}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div
@@ -130,7 +122,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
           {job.documents && job.documents.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Documents</CardTitle>
+                <CardTitle>{dict.jobs?.details?.documents || "Documents"}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3">
@@ -141,7 +133,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
                     >
                       <div className="flex items-center space-x-3">
                         <FileText className="w-5 h-5 text-blue-600" />
-                        <span className="text-gray-700 font-medium">Document {index + 1}</span>
+                        <span className="text-gray-700 font-medium">{dict.jobs?.details?.document || "Document"} {index + 1}</span>
                       </div>
                       <Button
                         size="sm"
@@ -150,7 +142,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
                         className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
                       >
                         <Download className="w-4 h-4 mr-1" />
-                        Download
+                        {dict.jobs?.details?.download || "Download"}
                       </Button>
                     </div>
                   ))}
@@ -163,7 +155,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
           {job.contactEmail && (
             <Card className="border-amber-200 bg-amber-50">
               <CardHeader>
-                <CardTitle className="text-amber-800">Contact Information</CardTitle>
+                <CardTitle className="text-amber-800">{dict.jobs?.details?.contactInfo || "Contact Information"}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center space-x-2 rtl:space-x-reverse text-amber-800">
@@ -209,7 +201,7 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
                 <Building2 className="w-8 h-8 text-blue-600" />
               </div>
               <CardTitle className="text-lg">{job.organization}</CardTitle>
-              <p className="text-sm text-gray-600">{job.category || "Organization"}</p>
+              <p className="text-sm text-gray-600">{job.category || dict.jobs?.details?.organization || "Organization"}</p>
             </CardHeader>
           </Card>
 
@@ -266,16 +258,16 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
           {daysRemaining !== null && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-center">Time Remaining</CardTitle>
+                <CardTitle className="text-center">{dict.jobs?.details?.timeRemaining || "Time Remaining"}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <div className={`text-3xl font-bold mb-2 ${daysRemaining <= 7 ? "text-red-600" : "text-green-600"}`}>
                   {daysRemaining > 0 ? daysRemaining : 0}
                 </div>
                 <p className="text-sm text-gray-600">
-                  {daysRemaining > 0 ? "Days left to apply" : "Application deadline passed"}
+                  {daysRemaining > 0 ? (dict.jobs?.details?.daysLeft || "Days left to apply") : (dict.jobs?.details?.deadlinePassed || "Application deadline passed")}
                 </p>
-                {job.deadline && <p className="text-xs text-gray-500 mt-2">Deadline: {formatDate(job.deadline)}</p>}
+                {job.deadline && <p className="text-xs text-gray-500 mt-2">{dict.jobs?.details?.deadlineLabel || "Deadline"}: {formatDate(job.deadline)}</p>}
               </CardContent>
             </Card>
           )}
@@ -283,41 +275,41 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
           {/* Job Details */}
           <Card>
             <CardHeader>
-              <CardTitle>Job Details</CardTitle>
+              <CardTitle>{dict.jobs?.details?.jobDetails || "Job Details"}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                <span className="text-gray-600">Organization</span>
+                <span className="text-gray-600">{dict.jobs?.details?.organization || "Organization"}</span>
                 <span className="font-medium">{job.organization}</span>
               </div>
 
               <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                <span className="text-gray-600">Location</span>
+                <span className="text-gray-600">{dict.jobs?.details?.location || "Location"}</span>
                 <span className="font-medium">{job.location}</span>
               </div>
 
               {job.category && (
                 <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Category</span>
+                  <span className="text-gray-600">{dict.jobs?.details?.category || "Category"}</span>
                   <span className="font-medium">{job.category}</span>
                 </div>
               )}
 
               {job.salary && (
                 <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Salary</span>
+                  <span className="text-gray-600">{dict.jobs?.details?.salary || "Salary"}</span>
                   <span className="font-medium text-green-600">{job.salary}</span>
                 </div>
               )}
 
               <div className="flex items-center justify-between py-3 border-b border-gray-100">
-                <span className="text-gray-600">Published</span>
+                <span className="text-gray-600">{dict.jobs?.details?.published || "Published"}</span>
                 <span className="font-medium">{formatDate(job.publishedAt || job.createdAt)}</span>
               </div>
 
               {job.deadline && (
                 <div className="flex items-center justify-between py-3">
-                  <span className="text-gray-600">Deadline</span>
+                  <span className="text-gray-600">{dict.jobs?.details?.deadlineLabel || "Deadline"}</span>
                   <span
                     className={`font-medium ${daysRemaining && daysRemaining <= 7 ? "text-red-600" : "text-gray-900"}`}
                   >
