@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminAxios } from "@/lib/admin-api";
 import AdminLayout from "@/components/admin/AdminLayout";
 import ProtectedAdminRoute from "@/components/admin/ProtectedAdminRoute";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import {
   CheckCircle,
   XCircle,
   Eye,
+  Edit,
+  Trash2,
   Calendar,
   MapPin,
   Building,
@@ -22,6 +25,8 @@ import {
   AlertCircle,
 } from "lucide-react";
 
+const API_URL = "/jobs";
+
 interface Job {
   _id: string;
   title: string;
@@ -32,8 +37,51 @@ interface Job {
   salary?: string;
   contactEmail?: string;
   publishedAt?: string;
+  deadline?: string;
+  description: string;
+  instructions?: string;
+  documents?: string[];
   submittedBy?: string;
   [key: string]: any;
+}
+
+function DeleteModal({
+  onConfirm,
+  onCancel,
+}: {
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+        <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mx-auto mb-4">
+          <Trash2 className="w-6 h-6 text-red-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
+          Delete Job
+        </h3>
+        <p className="text-gray-600 text-center mb-6">
+          Are you sure you want to delete this job? This action cannot be
+          undone.
+        </p>
+        <div className="flex gap-3">
+          <button
+            className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="flex-1 bg-red-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-red-700 transition-colors"
+            onClick={onConfirm}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function RejectModal({
@@ -87,10 +135,293 @@ function RejectModal({
   );
 }
 
+function JobForm({
+  initial,
+  onSave,
+  onCancel,
+}: {
+  initial?: Job;
+  onSave: (formData: FormData) => void;
+  onCancel: () => void;
+}) {
+  const [form, setForm] = useState<Partial<Job>>(
+    initial || {
+      title: "",
+      organization: "",
+      location: "",
+      publishedAt: "",
+      deadline: "",
+      description: "",
+      instructions: "",
+      salary: "",
+      category: "",
+      contactEmail: "",
+      documents: [],
+    }
+  );
+  const [files, setFiles] = useState<File[]>([]);
+  const [error, setError] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    const handleUploadComplete = () => setIsUploading(false);
+    const formElement = document.querySelector("form");
+    if (formElement) {
+      formElement.addEventListener("uploadComplete", handleUploadComplete);
+      return () =>
+        formElement.removeEventListener("uploadComplete", handleUploadComplete);
+    }
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFiles(Array.from(e.target.files));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.title || !form.location || !form.description) {
+      setError("Title, Location, and Description are required");
+      return;
+    }
+
+    const maxFileSize = 50 * 1024 * 1024;
+    for (const file of files) {
+      if (file.size > maxFileSize) {
+        setError(
+          `File "${file.name}" is too large. Maximum file size is 50MB.`
+        );
+        return;
+      }
+    }
+
+    setIsUploading(true);
+    setError("");
+
+    const data = new FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      if (key === "documents") return;
+      if (value) data.append(key, value as string);
+    });
+    files.forEach((file) => data.append("documents", file));
+    onSave(data);
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+      <div className="p-6 border-b border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900">
+          {initial ? "Edit Job" : "Create New Job"}
+        </h3>
+      </div>
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Job Title *
+            </label>
+            <input
+              name="title"
+              value={form.title || ""}
+              onChange={handleChange}
+              placeholder="Enter job title"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Organization
+            </label>
+            <input
+              name="organization"
+              value={form.organization || ""}
+              onChange={handleChange}
+              placeholder="Enter organization name"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Location *
+            </label>
+            <input
+              name="location"
+              value={form.location || ""}
+              onChange={handleChange}
+              placeholder="Enter job location"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Category
+            </label>
+            <input
+              name="category"
+              value={form.category || ""}
+              onChange={handleChange}
+              placeholder="Enter job category"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Salary
+            </label>
+            <input
+              name="salary"
+              value={form.salary || ""}
+              onChange={handleChange}
+              placeholder="Enter salary range"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Contact Email
+            </label>
+            <input
+              name="contactEmail"
+              value={form.contactEmail || ""}
+              onChange={handleChange}
+              placeholder="Enter contact email"
+              type="email"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Published Date
+            </label>
+            <input
+              name="publishedAt"
+              value={form.publishedAt || ""}
+              onChange={handleChange}
+              type="date"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Application Deadline
+            </label>
+            <input
+              name="deadline"
+              value={form.deadline || ""}
+              onChange={handleChange}
+              type="date"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Job Description *
+          </label>
+          <RichTextEditor
+            content={form.description || ""}
+            onChange={(content) => setForm({ ...form, description: content })}
+            placeholder="Enter detailed job description"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Application Instructions
+          </label>
+          <RichTextEditor
+            content={form.instructions || ""}
+            onChange={(content) => setForm({ ...form, instructions: content })}
+            placeholder="Enter application instructions"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Documents
+          </label>
+          <input
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          {files.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {files.map((file, i) => (
+                <div
+                  key={i}
+                  className="flex items-center text-sm text-gray-600"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  {file.name}
+                </div>
+              ))}
+            </div>
+          )}
+          {initial && initial.documents && initial.documents.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {initial.documents.map((doc, i) => (
+                <div
+                  key={i}
+                  className="flex items-center text-sm text-gray-500"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Existing: {doc}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
+
+        <div className="flex gap-3 pt-4">
+          <button
+            type="button"
+            className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isUploading}
+            className="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
+          >
+            {isUploading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                {files.length > 0 ? "Uploading..." : "Saving..."}
+              </div>
+            ) : initial ? (
+              "Update Job"
+            ) : (
+              "Create Job"
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
 export default function PendingJobsPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [rejectingJob, setRejectingJob] = useState<Job | null>(null);
+  const [editing, setEditing] = useState<Job | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const {
     data: pendingJobs,
@@ -135,6 +466,32 @@ export default function PendingJobsPage() {
         toast.error(error.response?.data?.message || "Failed to reject job");
       }
     },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
+      adminAxios.put(`${API_URL}/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        timeout: 120000,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pending-jobs"] });
+      setEditing(null);
+      toast.success("Job updated successfully");
+    },
+    onError: (error: any) => {
+      console.error("Job update error:", error);
+      toast.error(error.response?.data?.message || "Failed to update job");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => adminAxios.delete(`${API_URL}/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pending-jobs"] });
+      toast.success("Job deleted successfully");
+    },
+    onError: () => toast.error("Failed to delete job"),
   });
 
   const handleApprove = (jobId: string) => {
@@ -344,30 +701,48 @@ export default function PendingJobsPage() {
                     )}
                   </div>
 
-                  <div className="flex gap-2">
-                    <button
-                      className="flex items-center justify-center flex-1 bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
-                      onClick={() => handleApprove(job._id)}
-                      disabled={approveMutation.isPending}
-                    >
-                      <CheckCircle className="w-4 h-4 mr-1" />
-                      Approve
-                    </button>
-                    <button
-                      className="flex items-center justify-center flex-1 bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
-                      onClick={() => router.push(`/admin/jobs/${job._id}`)}
-                    >
-                      <Eye className="w-4 h-4 mr-1" />
-                      View
-                    </button>
-                    <button
-                      className="flex items-center justify-center flex-1 bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors"
-                      onClick={() => handleReject(job)}
-                      disabled={rejectMutation.isPending}
-                    >
-                      <XCircle className="w-4 h-4 mr-1" />
-                      Reject
-                    </button>
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <button
+                        className="flex items-center justify-center flex-1 bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+                        onClick={() => handleApprove(job._id)}
+                        disabled={approveMutation.isPending}
+                      >
+                        <CheckCircle className="w-4 h-4 mr-1" />
+                        Approve
+                      </button>
+                      <button
+                        className="flex items-center justify-center flex-1 bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors"
+                        onClick={() => handleReject(job)}
+                        disabled={rejectMutation.isPending}
+                      >
+                        <XCircle className="w-4 h-4 mr-1" />
+                        Reject
+                      </button>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        className="flex items-center justify-center flex-1 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                        onClick={() => setEditing(job)}
+                      >
+                        <Edit className="w-4 h-4 mr-1" />
+                        Edit
+                      </button>
+                      <button
+                        className="flex items-center justify-center flex-1 bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+                        onClick={() => router.push(`/admin/jobs/${job._id}`)}
+                      >
+                        <Eye className="w-4 h-4 mr-1" />
+                        View
+                      </button>
+                      <button
+                        className="flex items-center justify-center flex-1 bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                        onClick={() => setDeleteId(job._id)}
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" />
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -393,6 +768,32 @@ export default function PendingJobsPage() {
             </div>
           )}
         </div>
+
+        {/* Edit Modal */}
+        {editing && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+              <JobForm
+                initial={editing}
+                onSave={(formData) =>
+                  updateMutation.mutate({ id: editing._id, formData })
+                }
+                onCancel={() => setEditing(null)}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Delete Modal */}
+        {deleteId && (
+          <DeleteModal
+            onConfirm={() => {
+              deleteMutation.mutate(deleteId);
+              setDeleteId(null);
+            }}
+            onCancel={() => setDeleteId(null)}
+          />
+        )}
 
         {/* Reject Modal */}
         {rejectingJob && (

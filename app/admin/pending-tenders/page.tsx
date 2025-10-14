@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminAxios } from "@/lib/admin-api";
 import AdminLayout from "@/components/admin/AdminLayout";
 import ProtectedAdminRoute from "@/components/admin/ProtectedAdminRoute";
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import {
   CheckCircle,
   XCircle,
   Eye,
+  Edit,
+  Trash2,
   Calendar,
   MapPin,
   Building,
@@ -22,6 +25,8 @@ import {
   AlertCircle,
 } from "lucide-react";
 
+const API_URL = "/tenders";
+
 interface Tender {
   _id: string;
   title: string;
@@ -32,8 +37,51 @@ interface Tender {
   budget?: string;
   contactEmail?: string;
   publishedAt?: string;
+  deadline?: string;
+  description: string;
+  instructions?: string;
+  documents?: string[];
   submittedBy?: string;
   [key: string]: any;
+}
+
+function DeleteModal({
+  onConfirm,
+  onCancel,
+}: {
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+        <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mx-auto mb-4">
+          <Trash2 className="w-6 h-6 text-red-600" />
+        </div>
+        <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
+          Delete Tender
+        </h3>
+        <p className="text-gray-600 text-center mb-6">
+          Are you sure you want to delete this tender? This action cannot be
+          undone.
+        </p>
+        <div className="flex gap-3">
+          <button
+            className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="flex-1 bg-red-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-red-700 transition-colors"
+            onClick={onConfirm}
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function RejectModal({ onConfirm, onCancel, tenderTitle }: { onConfirm: (reason: string) => void; onCancel: () => void; tenderTitle: string }) {
@@ -57,10 +105,293 @@ function RejectModal({ onConfirm, onCancel, tenderTitle }: { onConfirm: (reason:
   );
 }
 
+function TenderForm({
+  initial,
+  onSave,
+  onCancel,
+}: {
+  initial?: Tender;
+  onSave: (formData: FormData) => void;
+  onCancel: () => void;
+}) {
+  const [form, setForm] = useState<Partial<Tender>>(
+    initial || {
+      title: "",
+      organization: "",
+      location: "",
+      publishedAt: "",
+      deadline: "",
+      description: "",
+      instructions: "",
+      budget: "",
+      category: "",
+      contactEmail: "",
+      documents: [],
+    }
+  );
+  const [files, setFiles] = useState<File[]>([]);
+  const [error, setError] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+
+  useEffect(() => {
+    const handleUploadComplete = () => setIsUploading(false);
+    const formElement = document.querySelector("form");
+    if (formElement) {
+      formElement.addEventListener("uploadComplete", handleUploadComplete);
+      return () =>
+        formElement.removeEventListener("uploadComplete", handleUploadComplete);
+    }
+  }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFiles(Array.from(e.target.files));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.title || !form.location || !form.description) {
+      setError("Title, Location, and Description are required");
+      return;
+    }
+
+    const maxFileSize = 50 * 1024 * 1024;
+    for (const file of files) {
+      if (file.size > maxFileSize) {
+        setError(
+          `File "${file.name}" is too large. Maximum file size is 50MB.`
+        );
+        return;
+      }
+    }
+
+    setIsUploading(true);
+    setError("");
+
+    const data = new FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      if (key === "documents") return;
+      if (value) data.append(key, value as string);
+    });
+    files.forEach((file) => data.append("documents", file));
+    onSave(data);
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-lg border border-gray-100">
+      <div className="p-6 border-b border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900">
+          {initial ? "Edit Tender" : "Create New Tender"}
+        </h3>
+      </div>
+      <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Tender Title *
+            </label>
+            <input
+              name="title"
+              value={form.title || ""}
+              onChange={handleChange}
+              placeholder="Enter tender title"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Organization
+            </label>
+            <input
+              name="organization"
+              value={form.organization || ""}
+              onChange={handleChange}
+              placeholder="Enter organization name"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Location *
+            </label>
+            <input
+              name="location"
+              value={form.location || ""}
+              onChange={handleChange}
+              placeholder="Enter tender location"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Category
+            </label>
+            <input
+              name="category"
+              value={form.category || ""}
+              onChange={handleChange}
+              placeholder="Enter tender category"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Budget
+            </label>
+            <input
+              name="budget"
+              value={form.budget || ""}
+              onChange={handleChange}
+              placeholder="Enter budget range"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Contact Email
+            </label>
+            <input
+              name="contactEmail"
+              value={form.contactEmail || ""}
+              onChange={handleChange}
+              placeholder="Enter contact email"
+              type="email"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Published Date
+            </label>
+            <input
+              name="publishedAt"
+              value={form.publishedAt || ""}
+              onChange={handleChange}
+              type="date"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Submission Deadline
+            </label>
+            <input
+              name="deadline"
+              value={form.deadline || ""}
+              onChange={handleChange}
+              type="date"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Tender Description *
+          </label>
+          <RichTextEditor
+            content={form.description || ""}
+            onChange={(content) => setForm({ ...form, description: content })}
+            placeholder="Enter detailed tender description"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Submission Instructions
+          </label>
+          <RichTextEditor
+            content={form.instructions || ""}
+            onChange={(content) => setForm({ ...form, instructions: content })}
+            placeholder="Enter submission instructions"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Documents
+          </label>
+          <input
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          {files.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {files.map((file, i) => (
+                <div
+                  key={i}
+                  className="flex items-center text-sm text-gray-600"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  {file.name}
+                </div>
+              ))}
+            </div>
+          )}
+          {initial && initial.documents && initial.documents.length > 0 && (
+            <div className="mt-2 space-y-1">
+              {initial.documents.map((doc, i) => (
+                <div
+                  key={i}
+                  className="flex items-center text-sm text-gray-500"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Existing: {doc}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+            <p className="text-red-600 text-sm">{error}</p>
+          </div>
+        )}
+
+        <div className="flex gap-3 pt-4">
+          <button
+            type="button"
+            className="flex-1 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+            onClick={onCancel}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={isUploading}
+            className="flex-1 bg-blue-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed"
+          >
+            {isUploading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                {files.length > 0 ? "Uploading..." : "Saving..."}
+              </div>
+            ) : initial ? (
+              "Update Tender"
+            ) : (
+              "Create Tender"
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
 export default function PendingTendersPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [rejectingTender, setRejectingTender] = useState<Tender | null>(null);
+  const [editing, setEditing] = useState<Tender | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data: pendingTenders, isLoading, error } = useQuery({
     queryKey: ["pending-tenders"],
@@ -102,6 +433,32 @@ export default function PendingTendersPage() {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
+      adminAxios.put(`${API_URL}/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        timeout: 120000,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pending-tenders"] });
+      setEditing(null);
+      toast.success("Tender updated successfully");
+    },
+    onError: (error: any) => {
+      console.error("Tender update error:", error);
+      toast.error(error.response?.data?.message || "Failed to update tender");
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => adminAxios.delete(`${API_URL}/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["pending-tenders"] });
+      toast.success("Tender deleted successfully");
+    },
+    onError: () => toast.error("Failed to delete tender"),
+  });
+
   const handleApprove = (tenderId: string) => {
     approveMutation.mutate(tenderId);
   };
@@ -135,7 +492,7 @@ export default function PendingTendersPage() {
   }
 
   return (
-    <ProtectedAdminRoute><AdminLayout><div className="p-6"><div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"><div><h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Pending Tenders</h1><p className="text-gray-600 mt-1">Review and approve tender submissions</p></div><div className="flex items-center gap-2"><AlertCircle className="w-5 h-5 text-yellow-600" /><span className="text-sm text-gray-600">{pendingTenders?.length || 0} tenders pending review</span></div></div><div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6"><div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><div className="flex items-center justify-between"><div><p className="text-sm font-medium text-gray-600">Pending Tenders</p><p className="text-2xl font-bold text-yellow-600">{pendingTenders?.length || 0}</p></div><div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center"><Clock className="w-6 h-6 text-yellow-600" /></div></div></div><div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><div className="flex items-center justify-between"><div><p className="text-sm font-medium text-gray-600">Ready to Review</p><p className="text-2xl font-bold text-blue-600">{pendingTenders?.length || 0}</p></div><div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center"><FileText className="w-6 h-6 text-blue-600" /></div></div></div><div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><div className="flex items-center justify-between"><div><p className="text-sm font-medium text-gray-600">Action Required</p><p className="text-2xl font-bold text-red-600">{pendingTenders?.length || 0}</p></div><div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center"><AlertCircle className="w-6 h-6 text-red-600" /></div></div></div></div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{pendingTenders?.map((tender: Tender) => (<div key={tender._id} className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"><div className="p-6"><div className="flex items-start justify-between mb-4"><div className="flex-1"><h3 className="font-semibold text-gray-900 mb-1 line-clamp-2">{tender.title}</h3><div className="flex items-center text-sm text-gray-600 mb-2"><Building className="w-4 h-4 mr-1" />{tender.organization || "Confidential"}</div></div><div className="flex items-center gap-1"><span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1" />Pending</span></div></div><div className="space-y-2 mb-4"><div className="flex items-center text-sm text-gray-600"><MapPin className="w-4 h-4 mr-2" />{tender.location}</div>{tender.category && <div className="flex items-center text-sm text-gray-600"><Tag className="w-4 h-4 mr-2" />{tender.category}</div>}{tender.budget && <div className="flex items-center text-sm text-gray-600"><DollarSign className="w-4 h-4 mr-2" />{tender.budget}</div>}{tender.contactEmail && <div className="flex items-center text-sm text-gray-600"><Mail className="w-4 h-4 mr-2" />{tender.contactEmail}</div>}<div className="flex items-center text-sm text-gray-600"><Calendar className="w-4 h-4 mr-2" />{tender.publishedAt ? new Date(tender.publishedAt).toLocaleDateString() : "N/A"}</div>{tender.submittedBy && <div className="flex items-center text-sm text-gray-600"><span className="text-xs bg-gray-100 px-2 py-1 rounded">Submitted by: {tender.submittedBy}</span></div>}</div><div className="flex gap-2"><button className="flex items-center justify-center flex-1 bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors" onClick={() => handleApprove(tender._id)} disabled={approveMutation.isPending}><CheckCircle className="w-4 h-4 mr-1" />Approve</button><button className="flex items-center justify-center flex-1 bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors" onClick={() => router.push(`/admin/tenders/${tender._id}`)}><Eye className="w-4 h-4 mr-1" />View</button><button className="flex items-center justify-center flex-1 bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors" onClick={() => handleReject(tender)} disabled={rejectMutation.isPending}><XCircle className="w-4 h-4 mr-1" />Reject</button></div></div></div>))}</div>{pendingTenders?.length === 0 && <div className="text-center py-12"><CheckCircle className="w-16 h-16 text-green-300 mx-auto mb-4" /><h3 className="text-lg font-medium text-gray-900 mb-2">No pending tenders</h3><p className="text-gray-600 mb-6">All tender submissions have been reviewed and processed.</p><button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors" onClick={() => router.push("/admin/tenders")}>View All Tenders</button></div>}</div>{rejectingTender && <RejectModal tenderTitle={rejectingTender.title} onConfirm={confirmReject} onCancel={() => setRejectingTender(null)} />}</AdminLayout></ProtectedAdminRoute>
+    <ProtectedAdminRoute><AdminLayout><div className="p-6"><div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"><div><h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Pending Tenders</h1><p className="text-gray-600 mt-1">Review and approve tender submissions</p></div><div className="flex items-center gap-2"><AlertCircle className="w-5 h-5 text-yellow-600" /><span className="text-sm text-gray-600">{pendingTenders?.length || 0} tenders pending review</span></div></div><div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6"><div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><div className="flex items-center justify-between"><div><p className="text-sm font-medium text-gray-600">Pending Tenders</p><p className="text-2xl font-bold text-yellow-600">{pendingTenders?.length || 0}</p></div><div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center"><Clock className="w-6 h-6 text-yellow-600" /></div></div></div><div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><div className="flex items-center justify-between"><div><p className="text-sm font-medium text-gray-600">Ready to Review</p><p className="text-2xl font-bold text-blue-600">{pendingTenders?.length || 0}</p></div><div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center"><FileText className="w-6 h-6 text-blue-600" /></div></div></div><div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"><div className="flex items-center justify-between"><div><p className="text-sm font-medium text-gray-600">Action Required</p><p className="text-2xl font-bold text-red-600">{pendingTenders?.length || 0}</p></div><div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center"><AlertCircle className="w-6 h-6 text-red-600" /></div></div></div></div><div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">{pendingTenders?.map((tender: Tender) => (<div key={tender._id} className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow"><div className="p-6"><div className="flex items-start justify-between mb-4"><div className="flex-1"><h3 className="font-semibold text-gray-900 mb-1 line-clamp-2">{tender.title}</h3><div className="flex items-center text-sm text-gray-600 mb-2"><Building className="w-4 h-4 mr-1" />{tender.organization || "Confidential"}</div></div><div className="flex items-center gap-1"><span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1" />Pending</span></div></div><div className="space-y-2 mb-4"><div className="flex items-center text-sm text-gray-600"><MapPin className="w-4 h-4 mr-2" />{tender.location}</div>{tender.category && <div className="flex items-center text-sm text-gray-600"><Tag className="w-4 h-4 mr-2" />{tender.category}</div>}{tender.budget && <div className="flex items-center text-sm text-gray-600"><DollarSign className="w-4 h-4 mr-2" />{tender.budget}</div>}{tender.contactEmail && <div className="flex items-center text-sm text-gray-600"><Mail className="w-4 h-4 mr-2" />{tender.contactEmail}</div>}<div className="flex items-center text-sm text-gray-600"><Calendar className="w-4 h-4 mr-2" />{tender.publishedAt ? new Date(tender.publishedAt).toLocaleDateString() : "N/A"}</div>{tender.submittedBy && <div className="flex items-center text-sm text-gray-600"><span className="text-xs bg-gray-100 px-2 py-1 rounded">Submitted by: {tender.submittedBy}</span></div>}</div><div className="space-y-2"><div className="flex gap-2"><button className="flex items-center justify-center flex-1 bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors" onClick={() => handleApprove(tender._id)} disabled={approveMutation.isPending}><CheckCircle className="w-4 h-4 mr-1" />Approve</button><button className="flex items-center justify-center flex-1 bg-red-100 text-red-600 px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors" onClick={() => handleReject(tender)} disabled={rejectMutation.isPending}><XCircle className="w-4 h-4 mr-1" />Reject</button></div><div className="flex gap-2"><button className="flex items-center justify-center flex-1 bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" onClick={() => setEditing(tender)}><Edit className="w-4 h-4 mr-1" />Edit</button><button className="flex items-center justify-center flex-1 bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors" onClick={() => router.push(`/admin/tenders/${tender._id}`)}><Eye className="w-4 h-4 mr-1" />View</button><button className="flex items-center justify-center flex-1 bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-colors" onClick={() => setDeleteId(tender._id)}><Trash2 className="w-4 h-4 mr-1" />Delete</button></div></div></div></div>))}</div>{pendingTenders?.length === 0 && <div className="text-center py-12"><CheckCircle className="w-16 h-16 text-green-300 mx-auto mb-4" /><h3 className="text-lg font-medium text-gray-900 mb-2">No pending tenders</h3><p className="text-gray-600 mb-6">All tender submissions have been reviewed and processed.</p><button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors" onClick={() => router.push("/admin/tenders")}>View All Tenders</button></div>}</div>{editing && <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"><div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"><TenderForm initial={editing} onSave={(formData) => updateMutation.mutate({ id: editing._id, formData })} onCancel={() => setEditing(null)} /></div></div>}{deleteId && <DeleteModal onConfirm={() => { deleteMutation.mutate(deleteId); setDeleteId(null); }} onCancel={() => setDeleteId(null)} />}{rejectingTender && <RejectModal tenderTitle={rejectingTender.title} onConfirm={confirmReject} onCancel={() => setRejectingTender(null)} />}</AdminLayout></ProtectedAdminRoute>
   );
 }
 
