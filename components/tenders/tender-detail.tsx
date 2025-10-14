@@ -49,17 +49,6 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
     return `${baseUrl}/uploads/${filename}`
   }
 
-  // const handleDownload = (filename: string, index: number) => {
-  //   const url = getFileDownloadUrl(filename)
-  //   const link = document.createElement('a')
-  //   link.href = url
-  //   link.download = `document-${index + 1}`
-  //   link.target = '_blank'
-  //   document.body.appendChild(link)
-  //   link.click()
-  //   document.body.removeChild(link)
-  // }
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Back Button */}

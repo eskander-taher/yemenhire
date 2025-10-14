@@ -138,14 +138,14 @@ export function Footer({ locale, dict }: FooterProps) {
 							<span>Made with love in Yemen</span>
 						</p>
 						
-						{/* Admin Access Button */}
+						{/* Staff Portal Button */}
 						<Link
 							href="/admin"
 							className="group flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 bg-gray-800/50 hover:bg-gray-700 rounded-lg border border-gray-700 hover:border-blue-500/50 transition-all duration-300"
 						>
 							<Shield className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors" />
 							<span className="text-sm text-gray-400 group-hover:text-blue-400 transition-colors">
-								Admin Panel
+								Staff Portal
 							</span>
 						</Link>
 					</div>
