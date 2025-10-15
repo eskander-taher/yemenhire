@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import { GoogleAnalytics } from '@/components/analytics/GoogleAnalytics'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -75,7 +76,12 @@ export default function RootLayout({
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<meta name="theme-color" content="#2563eb" />
 			</head>
-			<body suppressHydrationWarning className="min-h-screen bg-gray-50">{children}</body>
+			<body suppressHydrationWarning className="min-h-screen bg-gray-50">
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
+        {children}
+      </body>
 		</html>
   );
 }

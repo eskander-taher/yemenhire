@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, MapPin, DollarSign, Building2, ExternalLink, FileText, Clock, Mail, Download, Bookmark, Share2, Calendar } from "lucide-react"
 import { formatDate, formatRelativeTime } from "@/lib/utils"
+import { TenderSchema } from "@/components/seo/TenderSchema"
 import Link from "next/link"
 import type { Tender } from "@/lib/server-api"
 
@@ -39,6 +40,8 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
 
 
   return (
+    <>
+      <TenderSchema tender={tender} locale={locale} />
 		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 			{/* Back Button */}
 			<div className="mb-6">
@@ -339,5 +342,6 @@ export function TenderDetail({ tender, locale, dict }: TenderDetailProps) {
 				</div>
 			</div>
 		</div>
+    </>
   );
 }

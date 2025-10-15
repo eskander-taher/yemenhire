@@ -7,6 +7,7 @@ import { MapPin, Calendar, DollarSign, Building2, Bookmark, Share2, ExternalLink
 import type { Job } from "@/lib/server-api"
 import { useRelatedJobs } from "@/hooks/useJobs"
 import { RelatedJobCard } from "./related-job-card"
+import { JobPostingSchema } from "@/components/seo/JobPostingSchema"
 import Link from "next/link"
 
 interface JobDetailProps {
@@ -48,6 +49,8 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
   const daysRemaining = getDaysRemaining(job.deadline)
 
   return (
+    <>
+      <JobPostingSchema job={job} locale={locale} />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content */}
@@ -339,5 +342,6 @@ export function JobDetail({ job, locale, dict }: JobDetailProps) {
         </div>
       </div>
     </div>
+    </>
   )
 }
