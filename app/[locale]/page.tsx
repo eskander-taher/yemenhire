@@ -2,6 +2,8 @@ import { getDictionary } from "@/lib/dictionaries"
 import { HeroSection } from "@/components/home/hero-section"
 import { StatsSection } from "@/components/home/stats-section"
 import { FeaturesSection } from "@/components/home/features-section"
+import { FAQSection } from "@/components/home/faq-section"
+import { FAQSchema } from "@/components/seo/FAQSchema"
 import { fetchStats } from "@/lib/server-api"
 
 export default async function HomePage({
@@ -16,10 +18,14 @@ export default async function HomePage({
   const stats = await fetchStats()
 
   return (
-    <div className="min-h-screen">
-      <HeroSection locale={locale} dict={dict} />
-      <StatsSection locale={locale} dict={dict} stats={stats} />
-      <FeaturesSection locale={locale} dict={dict} />
-    </div>
+    <>
+      <FAQSchema faqs={dict.home.faq?.items || []} locale={locale} />
+      <div className="min-h-screen">
+        <HeroSection locale={locale} dict={dict} />
+        <StatsSection locale={locale} dict={dict} stats={stats} />
+        <FeaturesSection locale={locale} dict={dict} />
+        <FAQSection locale={locale} dict={dict} />
+      </div>
+    </>
   )
 }

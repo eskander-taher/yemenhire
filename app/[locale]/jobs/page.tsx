@@ -1,26 +1,45 @@
-import { Suspense } from "react"
-import JobsPageContent from "@/components/jobs/jobs-page-content"
+import { getDictionary } from "@/lib/dictionaries"
+import { JobsPageClient } from "@/components/jobs/jobs-page-client"
+import { fetchJobs } from "@/lib/server-api"
+
+// Revalidate every 5 minutes (jobs update frequently)
+export const revalidate = 300
 
 interface JobsPageProps {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }> | { [key: string]: string | string[] | undefined }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-function JobsPageFallback() {
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-        <p className="mt-2 text-gray-600">Loading jobs...</p>
-      </div>
-    </div>
-  )
-}
+export default async function JobsPage({ params, searchParams }: JobsPageProps) {
+  const { locale } = await params
+  const dict = await getDictionary(locale as "en" | "ar")
+  const resolvedSearchParams = await searchParams
 
-export default function JobsPage({ params }: JobsPageProps) {
+  // Extract search parameters
+  const search = (resolvedSearchParams.search as string) || ""
+  const category = (resolvedSearchParams.category as string) || ""
+  const location = (resolvedSearchParams.location as string) || ""
+  const city = (resolvedSearchParams.city as string) || ""
+  const organization = (resolvedSearchParams.organization as string) || ""
+  const page = Number.parseInt((resolvedSearchParams.page as string) || "1")
+
+  // Fetch jobs server-side
+  const initialJobsData = await fetchJobs({
+    search,
+    category,
+    location,
+    city,
+    organization,
+    page,
+    limit: 20,
+  })
+
   return (
-    <Suspense fallback={<JobsPageFallback />}>
-      <JobsPageContent params={params} />
-    </Suspense>
+    <JobsPageClient
+      locale={locale}
+      dict={dict}
+      initialData={initialJobsData}
+      searchParams={resolvedSearchParams}
+    />
   )
 }

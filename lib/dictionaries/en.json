@@ -44,6 +44,46 @@
           "description": "Get notified about new opportunities that match your profile"
         }
       ]
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Find answers to common questions about our platform",
+      "stillHaveQuestions": "Still have questions?",
+      "contactUs": "Contact Us",
+      "items": [
+        {
+          "question": "How can I apply for a job?",
+          "answer": "To apply for a job, click on the job posting that interests you from the jobs page, read the details carefully, and follow the application instructions provided. Most jobs require sending your CV to the specified email address. Make sure to include all required documents and mention the job title in the email subject line."
+        },
+        {
+          "question": "Is the platform free to use?",
+          "answer": "Yes, YemenHires platform is completely free for job seekers. You can browse all jobs and tenders and apply to them without any fees. For companies and organizations that want to post advertisements, we offer different packages to suit your needs."
+        },
+        {
+          "question": "How can I post a job or tender?",
+          "answer": "To post a job or tender, go to the 'Post Ad' page and fill out the form with the required details. This includes the title, description, location, salary (for jobs), and application deadline. After review and approval by our team, your ad will appear on the platform."
+        },
+        {
+          "question": "How long does it take to publish an ad?",
+          "answer": "We review all advertisements to ensure their quality and credibility. Ads are typically approved and published within 24-48 hours from the submission date. We will send you an email notification when your ad is published."
+        },
+        {
+          "question": "What areas in Yemen are covered?",
+          "answer": "We cover all Yemeni governorates and cities including Sanaa, Aden, Taiz, Ibb, Hodeidah, Hadramout, Dhamar, Mukalla, and others. You can search for job opportunities and tenders based on your preferred geographical location."
+        },
+        {
+          "question": "How do I know if a job or tender is trustworthy?",
+          "answer": "We verify all advertisements before publishing them to ensure their credibility. We contact the advertising companies and organizations and verify the accuracy of the information. We also recommend researching the advertising organization and verifying its reputation before applying."
+        },
+        {
+          "question": "Can I save jobs to apply later?",
+          "answer": "Currently, we recommend saving links to jobs you're interested in using your browser bookmarks. We're working on adding a save jobs feature and user accounts in upcoming updates to improve your experience."
+        },
+        {
+          "question": "What should I do if I miss the application deadline?",
+          "answer": "If you miss the application deadline, unfortunately you cannot apply for that opportunity. However, we recommend checking the platform regularly to see new opportunities. You may find similar opportunities from the same organization or others. Follow our page daily to get the latest opportunities."
+        }
+      ]
     }
   },
   "jobs": {
