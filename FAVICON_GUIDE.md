@@ -212,3 +212,4 @@ All favicons are now properly configured and will display correctly across all d
 - Use favicon testing tools mentioned above
 
 
+
