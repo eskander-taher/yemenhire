@@ -6,25 +6,6 @@ import './globals.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://yemenhires.com'),
-  title: {
-    default: 'YemenHires - وظائف ومناقصات اليمن | Jobs & Tenders in Yemen',
-    template: '%s | YemenHires'
-  },
-  description: 'منصة يمنية للوظائف والمناقصات - ابحث عن فرص العمل والمناقصات في اليمن | Yemeni platform for jobs and tenders - Find employment opportunities and tenders in Yemen',
-  keywords: [
-    'Yemen jobs',
-    'وظائف اليمن',
-    'Yemen tenders',
-    'مناقصات اليمن',
-    'وظائف صنعاء',
-    'Sanaa jobs',
-    'وظائف عدن',
-    'Aden jobs',
-    'Yemen employment',
-    'فرص عمل اليمن',
-    'مناقصات حكومية',
-    'government tenders Yemen'
-  ],
   authors: [{ name: 'YemenHires' }],
   creator: 'YemenHires',
   publisher: 'YemenHires',
@@ -54,13 +35,6 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
-    },
-  },
-  alternates: {
-    canonical: '/',
-    languages: {
-      'ar': '/ar',
-      'en': '/en',
     },
   },
 }
